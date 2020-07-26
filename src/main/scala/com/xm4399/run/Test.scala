@@ -4,7 +4,7 @@ import java.util
 import java.util.{ArrayList, LinkedHashMap}
 
 import com.xm4399.test.JdbcTest
-import com.xm4399.util.{CreateKuduTable, GetAllSmallTableName, GetTableStru}
+import com.xm4399.util.{CreateKuduTable, GetAllSubTableName, GetTableStru}
 import org.apache.spark.sql.{SaveMode, SparkSession}
 import  scala.collection.JavaConverters._
 
@@ -19,7 +19,7 @@ object Test {
       CreateKuduTable.createKuduTable(tableStru, args(1))
 
       if (3 == argsLen) {
-        val smallTableNameList = GetAllSmallTableName.getAllSmallTableName(args(0), args(1)).asScala
+        val smallTableNameList = GetAllSubTableName.getAllSmallTableName(args(0), args(1)).asScala
         for(oneSmallTable <- smallTableNameList){
           readMysql2Kudu(args(0), oneSmallTable)
         }

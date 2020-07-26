@@ -1,6 +1,6 @@
 package com.xm4399.test;
 
-import com.google.common.collect.ImmutableList;
+//import com.google.common.collect.ImmutableList;
 import org.apache.kudu.ColumnSchema;
 import org.apache.kudu.Schema;
 import org.apache.kudu.Type;
@@ -8,6 +8,7 @@ import org.apache.kudu.client.CreateTableOptions;
 import org.apache.kudu.client.KuduClient;
 import org.apache.kudu.client.KuduSession;
 import org.apache.kudu.client.PartialRow;
+import org.apache.kudu.shaded.com.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;
 import java.util.List;

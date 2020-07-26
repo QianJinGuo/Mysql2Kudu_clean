@@ -19,8 +19,8 @@ public class GetTableStru2 {
         }
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-            con = DriverManager.getConnection("jdbc:mysql://10.0.0.92:3310/" + dbName,
-                    "cnbbsReadonly", "LLKFN*k241235");
+            con = DriverManager.getConnection("jdbc:mysql://10.0.0.211:3307/" + dbName,
+                    "gprp", "gprp@@4399");
 
             Statement stmt = con.createStatement();
             //查询xx表各个字段的 类型, 是否为主键,(是主键返回"PRI",不是返回返回空字符串) ,是否可为空

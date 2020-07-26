@@ -7,14 +7,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 
-public class GetAllSmallTableName {
+public class GetAllSubTableName {
     //获取所有分表名
     public static ArrayList<String> getAllSmallTableName(String  dbName, String tableName){
         ArrayList<String> allSmallTableList = new ArrayList<String>() ;
         Connection con = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-            con = DriverManager.getConnection("jdbc:mysql://10.0.0.92:3310/" + dbName,
+            con = DriverManager.getConnection("jdbc:mysql://10.0.0.211:3307/" + dbName,
                     "cnbbsReadonly", "LLKFN*k241235");
 
             Statement stmt = con.createStatement();
