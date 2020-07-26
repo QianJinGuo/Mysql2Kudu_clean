@@ -7,7 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 
-public class GetAllSubTableName {
+public class ListAllSubTableName {
     //获取所有分表名
     public static ArrayList<String> getAllSmallTableName(String  dbName, String tableName){
         ArrayList<String> allSmallTableList = new ArrayList<String>() ;

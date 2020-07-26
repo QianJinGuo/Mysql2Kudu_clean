@@ -1,7 +1,7 @@
 package com.xm4399.run
 
 import com.xm4399.test.MyTsetCreate
-import com.xm4399.util.{CreateKuduTable, CreateKuduTable2, GetAllSubTableName, GetTableStru, GetTableStru2}
+import com.xm4399.util.{CreateKuduTable, CreateKuduTable2, ListAllSubTableName, GetTableStru, GetTableStru2}
 import org.apache.spark.sql.functions.lit
 import org.apache.spark.sql.{SaveMode, SparkSession}
 
@@ -15,7 +15,7 @@ object MyTest {
     val fieldNameArr :Array[String] = CreateKuduTable2.createKuduTable(tableStru, args(1),argsLen)
 
     if (3 == argsLen) {
-      val smallTableNameList = GetAllSubTableName.getAllSmallTableName(args(0), args(1)).asScala
+      val smallTableNameList = ListAllSubTableName.getAllSmallTableName(args(0), args(1)).asScala
       for(oneSmallTable <- smallTableNameList){
         println("正在加载表   "+ oneSmallTable +">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
         ReadMysqlSubTable2Kudu(args(0), oneSmallTable,fieldNameArr)
