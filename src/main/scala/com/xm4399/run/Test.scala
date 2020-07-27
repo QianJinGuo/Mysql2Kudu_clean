@@ -19,7 +19,7 @@ object Test {
       CreateKuduTable.createKuduTable(tableStru, args(1))
 
       if (3 == argsLen) {
-        val smallTableNameList = ListAllSubTableName.getAllSmallTableName(args(0), args(1)).asScala
+        val smallTableNameList = ListAllSubTableName.listAllSmallTableName(args(0), args(1)).asScala
         for(oneSmallTable <- smallTableNameList){
           readMysql2Kudu(args(0), oneSmallTable)
         }

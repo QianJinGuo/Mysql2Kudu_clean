@@ -9,13 +9,13 @@ import java.util.ArrayList;
 
 public class ListAllSubTableName {
     //获取所有分表名
-    public static ArrayList<String> getAllSmallTableName(String  dbName, String tableName){
+    public static ArrayList<String> listAllSmallTableName(String  dbName, String tableName){
         ArrayList<String> allSmallTableList = new ArrayList<String>() ;
         Connection con = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
             con = DriverManager.getConnection("jdbc:mysql://10.0.0.211:3307/" + dbName,
-                    "cnbbsReadonly", "LLKFN*k241235");
+                    "gprp", "gprp@@4399");
 
             Statement stmt = con.createStatement();
             //获取以tableName_开头的 后面跟着0-100  的所有表的表名

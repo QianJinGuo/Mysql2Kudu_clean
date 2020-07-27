@@ -15,7 +15,7 @@ object MyTest {
     val fieldNameArr :Array[String] = CreateKuduTable2.createKuduTable(tableStru, args(1),argsLen)
 
     if (3 == argsLen) {
-      val smallTableNameList = ListAllSubTableName.getAllSmallTableName(args(0), args(1)).asScala
+      val smallTableNameList = ListAllSubTableName.listAllSmallTableName(args(0), args(1)).asScala
       for(oneSmallTable <- smallTableNameList){
         println("正在加载表   "+ oneSmallTable +">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
         ReadMysqlSubTable2Kudu(args(0), oneSmallTable,fieldNameArr)
