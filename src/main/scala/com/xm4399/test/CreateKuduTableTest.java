@@ -2,7 +2,7 @@ package com.xm4399.test;
 
 //import com.google.common.collect.ImmutableList;
 import com.xm4399.util.MysqlType2KuduType;
-import com.xm4399.util.PriKey2Kudu;
+import com.xm4399.util.MysqlPriKey2KuduPriKey;
 import org.apache.kudu.ColumnSchema;
 import org.apache.kudu.Schema;
 import org.apache.kudu.client.*;
@@ -11,8 +11,7 @@ import org.apache.kudu.shaded.com.google.common.collect.ImmutableList;
 import java.util.*;
 
 public class CreateKuduTableTest {
-
-    public static void main(String[] args) {
+/*    public static void main(String[] args) {
         LinkedHashMap<String,String[]> tableStru = JdbcTest.getDBTableStru();
         createKuduTable(tableStru);
     }
@@ -56,10 +55,10 @@ public class CreateKuduTableTest {
                     columns.add(new ColumnSchema.ColumnSchemaBuilder(name, mysqlType2KuduType.toKuduType(fieldInfoArr[0])).nullable(true).build());
                 }
             }
-            /*columns.add(new ColumnSchema.ColumnSchemaBuilder("id", Type.INT64).key(true).build());
+            columns.add(new ColumnSchema.ColumnSchemaBuilder("id", Type.INT64).key(true).build());
             columns.add(new ColumnSchema.ColumnSchemaBuilder("user_id", Type.INT64).key(true).build());
             columns.add(new ColumnSchema.ColumnSchemaBuilder("start_time", Type.INT64).key(true).build());
-            columns.add(new ColumnSchema.ColumnSchemaBuilder("name", Type.STRING).nullable(true).build());*/
+            columns.add(new ColumnSchema.ColumnSchemaBuilder("name", Type.STRING).nullable(true).build());
 
 
             // 创建schema
@@ -69,7 +68,7 @@ public class CreateKuduTableTest {
 
 
             //ImmutableList<String> hashKeys = ImmutableList.of("id","user_id");
-            PriKey2Kudu priKey2Kudu = new PriKey2Kudu();
+            MysqlPriKey2KuduPriKey priKey2Kudu = new MysqlPriKey2KuduPriKey();
             ImmutableList<String> hashKeys = priKey2Kudu.getImmutableList(priKeyArr,priIndex);
             CreateTableOptions tableOptions = new CreateTableOptions();
 
@@ -78,7 +77,7 @@ public class CreateKuduTableTest {
             tableOptions.setNumReplicas(3);
 
             // 设置range分区
-            /*tableOptions.setRangePartitionColumns(ImmutableList.of("start_time"));
+            tableOptions.setRangePartitionColumns(ImmutableList.of("start_time"));
 
 
             // 规则：range范围为时间戳是1-10，10-20，20-30，30-40，40-50
@@ -90,7 +89,7 @@ public class CreateKuduTableTest {
                 count += 10;
                 upper.addLong("start_time", count);
                 tableOptions.addRangePartition(lower, upper);
-            }*/
+            }
 
 
             // 创建table,并设置partition
@@ -114,7 +113,7 @@ public class CreateKuduTableTest {
         }
     }
 
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         String tableName = "chenzhikun_test";
         KuduClient client = new KuduClient.KuduClientBuilder("10.20.0.197:7051,10.20.0.198:7051,10.20.0.199:7051").defaultAdminOperationTimeoutMs(60000).build();
         KuduSession session = client.newSession();

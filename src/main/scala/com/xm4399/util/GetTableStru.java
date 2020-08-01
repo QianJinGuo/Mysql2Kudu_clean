@@ -10,21 +10,20 @@ public class GetTableStru {
 
     //根据数据库和表名,获取相应字段和属性
 
-    public static  LinkedHashMap<String, String[]> getTableStru(String dbName, String tableName, int argsLen){
+    public static LinkedHashMap<String, String[]> getTableStru(String dbName, String tableName, String isSubTable){
         Connection con = null;
         LinkedHashMap<String,String[]>  fieldInfoMap = new LinkedHashMap<String, String[]>();
         //如果传入的为分表,则从分表   获取表结构
-        if( 3 == argsLen){
+        if("true".equals(isSubTable)){
             tableName = tableName + "_1";
         }
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-            con = DriverManager.getConnection("jdbc:mysql://10.0.0.92:3310/" + dbName,
-                    "cnbbsReadonly", "LLKFN*k241235");
-
+            con = DriverManager.getConnection("jdbc:mysql://10.0.0.211:3307/" + dbName,
+                    "gprp", "gprp@@4399");
             Statement stmt = con.createStatement();
-            //查询xx表各个字段的 类型, 是否为主键,(是主键返回"PRI",不是返回返回空字符串) ,是否可为空
-            String sql = "select column_name,data_type,is_nullable,column_key from  information_schema.columns " +
+            // column_key表示是否为主键,是的话返回"PRI",否的话返回空字符串
+            String sql = "select column_name,COLUMN_TYPE,is_nullable,column_key from  information_schema.columns " +
                     "where table_schema = " + "\""  + dbName + "\""  +"  and table_name  = " + "\""  +tableName +  "\"" +";"  ;
             ResultSet res = stmt.executeQuery(sql);
             while (res.next()) {

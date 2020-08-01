@@ -1,8 +1,5 @@
 package com.xm4399.test;
 
-import com.xm4399.util.CreateKuduTable;
-import com.xm4399.util.GetTableStru;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

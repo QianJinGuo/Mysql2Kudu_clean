@@ -1,18 +1,17 @@
 package com.xm4399.run
 
 import com.xm4399.test.MyTsetCreate
-import com.xm4399.util.{CreateKuduTable, CreateKuduTable2, ListAllSubTableName, GetTableStru, GetTableStru2}
+import com.xm4399.util.{ CreateKuduTable2, ListAllSubTableName, GetTableStru, GetTableStru}
 import org.apache.spark.sql.functions.lit
 import org.apache.spark.sql.{SaveMode, SparkSession}
 
 import scala.collection.JavaConverters._
 object MyTest {
   def main(args: Array[String]): Unit = {
-
     val argsLen = args.length
-    val tableStru = GetTableStru2.getTableStru(args(0), args(1), argsLen) //JdbcTest.getDBTableStru
+    val tableStru = GetTableStru.getTableStru(args(0), args(1), args(2)) //JdbcTest.getDBTableStru
     //获取mysql表的字段名数组,用在分表时的 dataFrame的列位置的调整
-    val fieldNameArr :Array[String] = CreateKuduTable2.createKuduTable(tableStru, args(1),argsLen)
+    val fieldNameArr :Array[String] = CreateKuduTable2.createKuduTable(tableStru, args(1), args(2))
 
     if (3 == argsLen) {
       val smallTableNameList = ListAllSubTableName.listAllSmallTableName(args(0), args(1)).asScala

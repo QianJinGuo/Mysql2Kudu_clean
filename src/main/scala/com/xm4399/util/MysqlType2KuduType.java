@@ -32,9 +32,6 @@ public class MysqlType2KuduType {
             case "tinyblob": case "blob": case "mediumblob": case "longblob" :
                 return Type.BINARY;
 
-
-
-
             default:
                 throw new IllegalArgumentException("The provided data type doesn't map to know any known one.");
         }

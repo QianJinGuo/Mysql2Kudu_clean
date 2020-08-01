@@ -15,7 +15,7 @@ import java.util.List;
 
 public class MyTsetCreate {
 
-    public static void create() {
+   /* public static void create() {
         String tableName = "chenzhikun_test_for_SubTable";
         KuduClient client = new KuduClient.KuduClientBuilder("10.20.0.197:7051,10.20.0.198:7051,10.20.0.199:7051").defaultAdminOperationTimeoutMs(60000).build();
         KuduSession session = client.newSession();
@@ -50,7 +50,7 @@ public class MyTsetCreate {
             tableOptions.addHashPartitions(hashKeys,3);
             tableOptions.setNumReplicas(3);
 
-           /* // 设置range分区
+           *//* // 设置range分区
             tableOptions.setRangePartitionColumns(ImmutableList.of("start_time"));
 
             // 规则：range范围为时间戳是1-10，10-20，20-30，30-40，40-50
@@ -62,7 +62,7 @@ public class MyTsetCreate {
                 count += 10;
                 upper.addLong("start_time", count);
                 tableOptions.addRangePartition(lower, upper);
-            }*/
+            }*//*
 
             System.out.println("create table is success!");
             // 创建table,并设置partition
@@ -83,5 +83,5 @@ public class MyTsetCreate {
                 }
             }
         }
-    }
+    }*/
 }
