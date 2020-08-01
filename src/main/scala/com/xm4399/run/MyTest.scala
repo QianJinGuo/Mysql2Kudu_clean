@@ -8,7 +8,7 @@ import org.apache.spark.sql.{SaveMode, SparkSession}
 import scala.collection.JavaConverters._
 object MyTest {
   def main(args: Array[String]): Unit = {
-    val argsLen = args.length
+    /*val argsLen = args.length
     val tableStru = GetTableStru.getTableStru(args(0), args(1), args(2)) //JdbcTest.getDBTableStru
     //获取mysql表的字段名数组,用在分表时的 dataFrame的列位置的调整
     val fieldNameArr :Array[String] = CreateKuduTable2.createKuduTable(tableStru, args(1), args(2))
@@ -22,7 +22,7 @@ object MyTest {
       }
     }else{
       readMysql2Kudu(args(0),args(1))
-    }
+    }*/
   }
 
   def ReadMysqlSubTable2Kudu(dbName: String, tableName: String, array: Array[String]): Unit = {

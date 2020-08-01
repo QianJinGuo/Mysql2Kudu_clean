@@ -64,12 +64,6 @@
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-compiler</artifactId>
       <version>${scala.version}</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>scala-library</artifactId>
-          <groupId>org.scala-lang</groupId>
-        </exclusion>
-      </exclusions>
       <!--<scope>provided</scope>-->
     </dependency>
 
@@ -86,21 +80,104 @@
       <version>${spark.version}</version>
       <exclusions>
         <exclusion>
+          <artifactId>jackson-annotations</artifactId>
+          <groupId>com.fasterxml.jackson.core</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>jackson-databind</artifactId>
+          <groupId>com.fasterxml.jackson.core</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>metrics-json</artifactId>
+          <groupId>io.dropwizard.metrics</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>jackson-module-scala_2.11</artifactId>
+          <groupId>com.fasterxml.jackson.module</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>guava</artifactId>
+          <groupId>com.google.guava</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>protobuf-java</artifactId>
+          <groupId>com.google.protobuf</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>paranamer</artifactId>
+          <groupId>com.thoughtworks.paranamer</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>commons-cli</artifactId>
+          <groupId>commons-cli</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>commons-codec</artifactId>
+          <groupId>commons-codec</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>commons-collections</artifactId>
+          <groupId>commons-collections</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>commons-lang</artifactId>
+          <groupId>commons-lang</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>netty</artifactId>
+          <groupId>io.netty</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>activation</artifactId>
+          <groupId>javax.activation</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>log4j</artifactId>
+          <groupId>log4j</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>avro</artifactId>
+          <groupId>org.apache.avro</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>commons-compress</artifactId>
+          <groupId>org.apache.commons</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>commons-math3</artifactId>
+          <groupId>org.apache.commons</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>javassist</artifactId>
+          <groupId>org.javassist</groupId>
+        </exclusion>
+        <exclusion>
           <artifactId>scala-library</artifactId>
+          <groupId>org.scala-lang</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>scala-reflect</artifactId>
           <groupId>org.scala-lang</groupId>
         </exclusion>
         <exclusion>
           <artifactId>scala-xml_2.11</artifactId>
           <groupId>org.scala-lang.modules</groupId>
         </exclusion>
+        <exclusion>
+          <artifactId>slf4j-api</artifactId>
+          <groupId>org.slf4j</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>slf4j-log4j12</artifactId>
+          <groupId>org.slf4j</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>snappy-java</artifactId>
+          <groupId>org.xerial.snappy</groupId>
+        </exclusion>
       </exclusions>
-      <!-- <scope>provided</scope>
-       <exclusions>
-         <exclusion>
-           <artifactId>commons-cli</artifactId>
-           <groupId>commons-cli</groupId>
-         </exclusion>
-       </exclusions>-->
+      <!--<scope>provided</scope>-->
+
     </dependency>
     <dependency>
       <groupId>org.apache.spark</groupId>
@@ -108,28 +185,77 @@
       <version>${spark.version}</version>
       <exclusions>
         <exclusion>
+          <artifactId>jackson-core</artifactId>
+          <groupId>com.fasterxml.jackson.core</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>arrow-vector</artifactId>
+          <groupId>org.apache.arrow</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>arrow-memory</artifactId>
+          <groupId>org.apache.arrow</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>jsr305</artifactId>
+          <groupId>com.google.code.findbugs</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>protobuf-java</artifactId>
+          <groupId>com.google.protobuf</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>commons-codec</artifactId>
+          <groupId>commons-codec</groupId>
+        </exclusion>
+        <exclusion>
           <artifactId>scala-parser-combinators_2.11</artifactId>
           <groupId>org.scala-lang.modules</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>slf4j-api</artifactId>
+          <groupId>org.slf4j</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>snappy-java</artifactId>
+          <groupId>org.xerial.snappy</groupId>
         </exclusion>
       </exclusions>
     </dependency>
 
-    <dependency>
+   <!-- <dependency>
       <groupId>org.apache.spark</groupId>
       <artifactId>spark-sql-kafka-0-10_${scala.binary.version}</artifactId>
       <version>${spark.version}</version>
-    </dependency>
+      <exclusions>
+        <exclusion>
+          <artifactId>kafka-clients</artifactId>
+          <groupId>org.apache.kafka</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>-->
 
-    <dependency>
+    <!--<dependency>
       <groupId>org.apache.spark</groupId>
       <artifactId>spark-streaming-kafka-0-10_${scala.binary.version}</artifactId>
       <version>${spark.version}</version>
-    </dependency>
+
+    </dependency>-->
 
     <dependency>
       <groupId>org.apache.kafka</groupId>
       <artifactId>kafka-clients</artifactId>
       <version>${kafka.version}</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>slf4j-api</artifactId>
+          <groupId>org.slf4j</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>snappy-java</artifactId>
+          <groupId>org.xerial.snappy</groupId>
+        </exclusion>
+      </exclusions>
       <!--<scope>provided</scope>-->
     </dependency>
 
@@ -147,6 +273,10 @@
       <version>${flink.version}</version>
       <exclusions>
         <exclusion>
+          <artifactId>commons-compress</artifactId>
+          <groupId>org.apache.commons</groupId>
+        </exclusion>
+        <exclusion>
           <artifactId>commons-lang3</artifactId>
           <groupId>org.apache.commons</groupId>
         </exclusion>
@@ -155,16 +285,12 @@
           <groupId>org.apache.commons</groupId>
         </exclusion>
         <exclusion>
-          <artifactId>commons-compress</artifactId>
-          <groupId>org.apache.commons</groupId>
+          <artifactId>objenesis</artifactId>
+          <groupId>org.objenesis</groupId>
         </exclusion>
         <exclusion>
           <artifactId>slf4j-api</artifactId>
           <groupId>org.slf4j</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>objenesis</artifactId>
-          <groupId>org.objenesis</groupId>
         </exclusion>
       </exclusions>
       <!--<scope>provided</scope>-->
@@ -174,16 +300,32 @@
       <groupId>org.apache.flink</groupId>
       <artifactId>flink-clients_2.11</artifactId>
       <version>${flink.version}</version>
-      <!--<exclusions>
+      <exclusions>
         <exclusion>
-          <artifactId>flink-runtime_2.11</artifactId>
-          <groupId>org.apache.flink</groupId>
+          <artifactId>chill_2.11</artifactId>
+          <groupId>com.twitter</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>commons-lang3</artifactId>
+          <groupId>org.apache.commons</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>lz4-java</artifactId>
+          <groupId>org.lz4</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>scala-parser-combinators_2.11</artifactId>
+          <groupId>org.scala-lang.modules</groupId>
         </exclusion>
         <exclusion>
           <artifactId>slf4j-api</artifactId>
           <groupId>org.slf4j</groupId>
         </exclusion>
-      </exclusions>-->
+        <exclusion>
+          <artifactId>snappy-java</artifactId>
+          <groupId>org.xerial.snappy</groupId>
+        </exclusion>
+      </exclusions>
       <!--<scope>provided</scope>-->
     </dependency>
 
@@ -200,29 +342,7 @@
           <artifactId>slf4j-api</artifactId>
           <groupId>org.slf4j</groupId>
         </exclusion>
-        <exclusion>
-          <artifactId>scala-parser-combinators_2.11</artifactId>
-          <groupId>org.scala-lang.modules</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>chill_2.11</artifactId>
-          <groupId>com.twitter</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>commons-lang3</artifactId>
-          <groupId>org.apache.commons</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>scala-library</artifactId>
-          <groupId>org.scala-lang</groupId>
-        </exclusion>
       </exclusions>
-      <!--<exclusions>
-        <exclusion>
-          <artifactId>flink-runtime_2.11</artifactId>
-          <groupId>org.apache.flink</groupId>
-        </exclusion>
-      </exclusions>-->
       <!--<scope>provided</scope>-->
     </dependency>
 
@@ -236,13 +356,20 @@
           <groupId>org.apache.kafka</groupId>
         </exclusion>
       </exclusions>
+
     </dependency>
 
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
       <version>1.7.7</version>
-      <scope>runtime</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>slf4j-api</artifactId>
+          <groupId>org.slf4j</groupId>
+        </exclusion>
+      </exclusions>
+      <!-- <scope>runtime</scope>-->
     </dependency>
 
     <dependency>
@@ -257,14 +384,47 @@
       <artifactId>flink-shaded-guava</artifactId>
       <version>18.0-11.0</version>
     </dependency>
+
     <dependency>
       <groupId>org.apache.spark</groupId>
       <artifactId>spark-sql_2.11</artifactId>
       <version>2.3.1</version>
       <exclusions>
         <exclusion>
+          <artifactId>jackson-core</artifactId>
+          <groupId>com.fasterxml.jackson.core</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>arrow-vector</artifactId>
+          <groupId>org.apache.arrow</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>arrow-memory</artifactId>
+          <groupId>org.apache.arrow</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>jsr305</artifactId>
+          <groupId>com.google.code.findbugs</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>protobuf-java</artifactId>
+          <groupId>com.google.protobuf</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>commons-codec</artifactId>
+          <groupId>commons-codec</groupId>
+        </exclusion>
+        <exclusion>
           <artifactId>scala-parser-combinators_2.11</artifactId>
           <groupId>org.scala-lang.modules</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>slf4j-api</artifactId>
+          <groupId>org.slf4j</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>snappy-java</artifactId>
+          <groupId>org.xerial.snappy</groupId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -278,25 +438,6 @@
         <groupId>org.scala-tools</groupId>
         <artifactId>maven-scala-plugin</artifactId>
         <version>2.15.0</version>
-        <executions>
-          <execution>
-            <id>scala-compile-first</id>
-            <goals>
-              <goal>compile</goal>
-            </goals>
-            <configuration>
-              <includes>
-                <include>**/*.scala</include>
-              </includes>
-            </configuration>
-          </execution>
-          <execution>
-            <id>scala-test-compile</id>
-            <goals>
-              <goal>testCompile</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
 
       <plugin>
