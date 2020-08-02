@@ -14,7 +14,7 @@ public class MyTest {
 
     }*/
     public static void main(String[] args) {
-        //String rex = "[unsignes]";
+        /*//String rex = "[unsignes]";
         String str = "varchar(100)";
         str = "text";
         str.trim();
@@ -31,8 +31,11 @@ public class MyTest {
             if (str2.trim().endsWith("unsigned")) {
 
             }
-        }
+        }*/
 
+        String str = "thread_922";
+        str = str.substring(str.lastIndexOf("_") + 1,str.length());
+        System.out.println(str);
 
     }
 

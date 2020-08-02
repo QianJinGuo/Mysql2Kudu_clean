@@ -1,4 +1,4 @@
-package com.xm4399.util;
+package com.xm4399.util_2;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -96,8 +96,4 @@ public class GetTableStru {
         return fieldInfoMap;
     }
 
-
-    public static void main(String[] args) {
-        getTableStru2("localhost:3306","canal","canal","chenzhikun", "first_canal","ff");
-    }
 }

@@ -1,6 +1,7 @@
-package com.xm4399.util;
+package com.xm4399.util_2;
 
 import com.xm4399.test.TwoTypeCon;
+import com.xm4399.util.MysqlPriKey2KuduPriKey;
 import org.apache.kudu.ColumnSchema;
 import org.apache.kudu.Schema;
 import org.apache.kudu.Type;
@@ -16,18 +17,17 @@ import java.util.Map;
 
 public class CreateKuduTable2 {
 
-    //根据传入的字段结构建kudu表,并返回字段名的数组
+    //根据传入的字段结构建kuud表,并返回字段名的数组
     public  static String[] createKuduTable(LinkedHashMap<String,String[]> fieldInfoMap, String tableName, String isSubTable){
-        KuduClient client = new KuduClient.KuduClientBuilder("10.20.0.197:7051,10.20.0.198:7051,10.20.0.199:7051")
-                                .defaultAdminOperationTimeoutMs(60000).build();
+        KuduClient client = new KuduClient.KuduClientBuilder("10.20.0.197:7051,10.20.0.198:7051,10.20.0.199:7051").defaultAdminOperationTimeoutMs(60000).build();
         KuduSession session = client.newSession();
         // 此处所定义的是rpc连接超时
         session.setTimeoutMillis(60000);
-        tableName ="chenzhikun_test_for_SubTable";
+        //tableName ="chenzhikun_test_for_SubTable";
         //获取fieldInfoMap的元素个数
         int fieldCount = fieldInfoMap.size() +1;
         String[] fieldNameArr = new String[fieldCount];
-        fieldNameArr[0] = "table_id";
+        fieldNameArr[0] = "table_name";
         int fieldNameArrIndex =1;
         try {
             // 测试，如果table存在的情况下，就删除该表
@@ -39,14 +39,15 @@ public class CreateKuduTable2 {
             }
             List<ColumnSchema> columns = new ArrayList<ColumnSchema>();
             // 创建列
+            //MysqlType2KuduType mysqlType2KuduType = new MysqlType2KuduType();
             TwoTypeCon twoTypeCon = new TwoTypeCon();
             //主键可能有多个,放入数组
             String[] priKeyArr = new String[8];
             int priIndex =0;
-            //分表情况下,第一个主键为 table_id
             if("true".equals(isSubTable)){
-                priKeyArr[0] = "table_id";
-                columns.add(new ColumnSchema.ColumnSchemaBuilder("table_id", Type.INT16).key(true).build());
+                //分表时,往kudu添加名为table_name的主键
+                priKeyArr[0] = "table_name";
+                columns.add(new ColumnSchema.ColumnSchemaBuilder("table_name", Type.STRING).key(true).build());
                 priIndex++;
             }
             for(Map.Entry<String,String[]>  fieldInfo : fieldInfoMap.entrySet()){
@@ -64,6 +65,7 @@ public class CreateKuduTable2 {
                     columns.add(new ColumnSchema.ColumnSchemaBuilder(name, twoTypeCon.toKuduType(fieldInfoArr[0])).nullable(true).build());
                 }
             }
+
             // 创建schema
             Schema schema = new Schema(columns);
             MysqlPriKey2KuduPriKey priKey2Kudu = new MysqlPriKey2KuduPriKey();
