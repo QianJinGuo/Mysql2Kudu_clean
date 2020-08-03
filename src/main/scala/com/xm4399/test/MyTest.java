@@ -1,42 +1,25 @@
 package com.xm4399.test;
 
+import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MyTest {
 
 
-    /*public static void main(String[] args) {
-        GetTableStru getTableStru = new GetTableStru();
-        CreateKuduTable createKuduTable = new CreateKuduTable();
-        //createKuduTable.createKuduTable(getTableStru.getTableStru("chenzhikun_test","chenzhikun_test_3"),"chenzhikun_test_3");
-        createKuduTable.createKuduTable(getTableStru.getTableStru(args[0],args[1]),args[1]);
-
-    }*/
-    public static void main(String[] args) {
-        /*//String rex = "[unsignes]";
-        String str = "varchar(100)";
-        str = "text";
-        str.trim();
-        //macthTest(rex,str);
-
-
-        String[] arr = str.split("\\(");
-        if (1 == arr.length) {
-            System.out.println(arr[0]);
+    public static String getJarFile()throws IOException {
+        InputStream in=MyTest.class.getClass().getResourceAsStream("/instance.properties");//读jar包根目录下的idcheck-file.properties文件
+        //Reader f = new InputStreamReader(in);
+        BufferedReader fb = new BufferedReader(new InputStreamReader(in));
+        StringBuffer sb = new StringBuffer("");
+        String s = "";
+        while((s = fb.readLine()) != null) {
+            sb = sb.append(s);
         }
-        if (2 == arr.length) {
-            System.out.println(arr[0]);
-            String str2 = arr[1];
-            if (str2.trim().endsWith("unsigned")) {
-
-            }
-        }*/
-
-        String str = "thread_922";
-        str = str.substring(str.lastIndexOf("_") + 1,str.length());
-        System.out.println(str);
-
+        return sb.toString();
+    }
+    public static void main(String[] args) throws IOException {
+        System.out.println(getJarFile());
     }
 
 

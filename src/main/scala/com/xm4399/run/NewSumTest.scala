@@ -2,7 +2,7 @@ package com.xm4399.run
 
 import com.xm4399.realtime.RealTimeIncrease2Kudu
 import com.xm4399.run.SumTest.{ReadMysqlSubTable2Kudu, readMysql2Kudu}
-import com.xm4399.util.{CreateKuduTable2, GetTableStru, ListAllSubTableName}
+import com.xm4399.util.{CreateAndStartInstance_2, CreateKuduTable2, GetTableStru, ListAllSubTableName}
 import org.apache.spark.sql.functions.lit
 import org.apache.spark.sql.{SaveMode, SparkSession}
 
@@ -16,7 +16,6 @@ object NewSumTest {
 
   def main(args: Array[String]): Unit = {
     val address = args(0);
-    println(address)
     val username = args(1);
     val password = args(2);
     val dbName = args(3);
@@ -39,6 +38,7 @@ object NewSumTest {
       readMysql2Kudu(address, username, password, dbName,tableName)
     }
     if (!"false".equals(isRealtime)){
+      CreateAndStartInstance_2.createAndStartInstance(address, username, password, dbName, tableName, isRealtime);
       new RealTimeIncrease2Kudu().realTimeIncrease(isSubTable);
     }
 
