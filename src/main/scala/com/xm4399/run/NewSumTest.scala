@@ -68,7 +68,7 @@ object NewSumTest {
       .mode(SaveMode.Append) // 只支持Append模式 键相同的会自动覆盖
       .format("org.apache.kudu.spark.kudu")
       .option("kudu.master", KUDU_MASTERS)
-      .option("kudu.table", "chenzhikun_test_for_SubTable")
+      .option("kudu.table", tableName)
       .save()
 
   }
@@ -91,7 +91,7 @@ object NewSumTest {
       .mode(SaveMode.Append) // 只支持Append模式 键相同的会自动覆盖
       .format("org.apache.kudu.spark.kudu")
       .option("kudu.master", KUDU_MASTERS)
-      .option("kudu.table", "chenzhikun_test_for_SubTable")
+      .option("kudu.table", tableName)
       .save()
     spark.close()
 

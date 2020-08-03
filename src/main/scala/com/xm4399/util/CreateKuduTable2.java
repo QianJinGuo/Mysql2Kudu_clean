@@ -23,7 +23,7 @@ public class CreateKuduTable2 {
         KuduSession session = client.newSession();
         // 此处所定义的是rpc连接超时
         session.setTimeoutMillis(60000);
-        tableName ="chenzhikun_test_for_SubTable";
+        //tableName ="chenzhikun_test_for_SubTable";
         //获取fieldInfoMap的元素个数
         int fieldCount = fieldInfoMap.size() +1;
         String[] fieldNameArr = new String[fieldCount];

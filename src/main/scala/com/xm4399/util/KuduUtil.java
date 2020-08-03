@@ -173,9 +173,13 @@ public class KuduUtil implements Serializable {
                             e.printStackTrace();
                         }
                     }else if("table_id" .equals(colName)){
+                        System.out.println("进入table_id>>>>>>>>>>>");
                         String subTableName = JSON.parseObject(record.value()).getOrDefault("table","").toString();
+                        System.out.println("分表名为: "   + subTableName + ">>>>>>>>>>>>>>>>>>>>>>>>");
                         String table_id = subTableName.substring(subTableName.lastIndexOf("_") + 1, subTableName.length());
-                        row.addByte(colIdx, Byte.parseByte(table_id));
+                        System.out.println("table_id名为: "   + table_id + ">>>>>>>>>>>>>>>>>>>>>>>>");
+                        row.addShort(colIdx, Short.parseShort(table_id));
+                        System.out.println("row add完毕>>>>>>>>>>>>>>>>>>>>>>");
                         //addRow(row,table_id,colName,colIdx,colType,dataType);
                     }
                 }
