@@ -69,12 +69,12 @@
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
       <version>4.5.2</version>
-      <exclusions>
+      <!--<exclusions>
         <exclusion>
           <artifactId>httpcore</artifactId>
           <groupId>org.apache.httpcomponents</groupId>
         </exclusion>
-      </exclusions>
+      </exclusions>-->
     </dependency>
     <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
     <dependency>
@@ -117,19 +117,8 @@
       <groupId>org.apache.spark</groupId>
       <artifactId>spark-core_2.11</artifactId>
       <version>${spark.version}</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>guava</artifactId>
-          <groupId>com.google.guava</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>protobuf-java</artifactId>
-          <groupId>com.google.protobuf</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>paranamer</artifactId>
-          <groupId>com.thoughtworks.paranamer</groupId>
-        </exclusion>
+     <!-- <exclusions>
+
         <exclusion>
           <artifactId>commons-cli</artifactId>
           <groupId>commons-cli</groupId>
@@ -194,7 +183,7 @@
           <artifactId>xercesImpl</artifactId>
           <groupId>xerces</groupId>
         </exclusion>
-      </exclusions>
+      </exclusions>-->
       <!--<scope>provided</scope>-->
     </dependency>
 
@@ -202,15 +191,9 @@
       <groupId>org.apache.spark</groupId>
       <artifactId>spark-sql_${scala.binary.version}</artifactId>
       <version>${spark.version}</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>jsr305</artifactId>
-          <groupId>com.google.code.findbugs</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>protobuf-java</artifactId>
-          <groupId>com.google.protobuf</groupId>
-        </exclusion>
+      <!--<exclusions>
+
+
         <exclusion>
           <artifactId>commons-compiler</artifactId>
           <groupId>org.codehaus.janino</groupId>
@@ -223,19 +206,20 @@
           <artifactId>snappy-java</artifactId>
           <groupId>org.xerial.snappy</groupId>
         </exclusion>
-      </exclusions>
+      </exclusions>-->
+      <!--<scope>provided</scope>-->
     </dependency>
 
     <dependency>
       <groupId>org.apache.kafka</groupId>
       <artifactId>kafka-clients</artifactId>
       <version>${kafka.version}</version>
-      <exclusions>
+      <!--<exclusions>
         <exclusion>
           <artifactId>snappy-java</artifactId>
           <groupId>org.xerial.snappy</groupId>
         </exclusion>
-      </exclusions>
+      </exclusions>-->
       <!--<scope>provided</scope>-->
     </dependency>
 
@@ -251,7 +235,7 @@
       <groupId>org.apache.flink</groupId>
       <artifactId>flink-java</artifactId>
       <version>${flink.version}</version>
-      <exclusions>
+      <!--<exclusions>
         <exclusion>
           <artifactId>commons-compress</artifactId>
           <groupId>org.apache.commons</groupId>
@@ -269,7 +253,7 @@
           <groupId>org.objenesis</groupId>
         </exclusion>
       </exclusions>
-
+-->
       <!--<scope>provided</scope>-->
     </dependency>
 
@@ -277,7 +261,7 @@
       <groupId>org.apache.flink</groupId>
       <artifactId>flink-clients_2.11</artifactId>
       <version>${flink.version}</version>
-      <exclusions>
+      <!--<exclusions>
         <exclusion>
           <artifactId>chill_2.11</artifactId>
           <groupId>com.twitter</groupId>
@@ -302,7 +286,7 @@
           <artifactId>snappy-java</artifactId>
           <groupId>org.xerial.snappy</groupId>
         </exclusion>
-      </exclusions>
+      </exclusions>-->
       <!--<scope>provided</scope>-->
     </dependency>
 
@@ -310,7 +294,7 @@
       <groupId>org.apache.flink</groupId>
       <artifactId>flink-streaming-java_${scala.binary.version}</artifactId>
       <version>${flink.version}</version>
-      <exclusions>
+      <!--<exclusions>
         <exclusion>
           <artifactId>commons-math3</artifactId>
           <groupId>org.apache.commons</groupId>
@@ -319,7 +303,7 @@
           <artifactId>slf4j-api</artifactId>
           <groupId>org.slf4j</groupId>
         </exclusion>
-      </exclusions>
+      </exclusions>-->
 
       <!--<scope>provided</scope>-->
     </dependency>

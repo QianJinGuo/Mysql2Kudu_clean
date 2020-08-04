@@ -25,8 +25,11 @@ object NewSumTest {
     val tableStru = GetTableStru.getTableStru2(address, username, password, dbName, tableName, isSubTable)
     //获取mysql表的字段名数组,用在分表时的 dataFrame的列位置的调整
     val fieldNameArr :Array[String] = CreateKuduTable2.createKuduTable(tableStru, tableName, isSubTable)
+    println("未进入分表方法>>>>>>>>>>>>>>>>>>>>>>>>>>>")
     if ("true".equals(isSubTable)) {
+      println("进入分表方法>>>>>>>>>>>>>>>>>>>>>>>>>>>")
       val spark = SparkSession.builder().master("local").appName("SparkKuduApp").getOrCreate()
+      println("获取spark>>>>>>>>>>>>>>>>>>>>>>>>>>>")
       val subTableNameList = ListAllSubTableName.listAllSmallTableName2(address, username, password, dbName, tableName).asScala
       for(oneSubTableName <- subTableNameList){
         println("表   "+ oneSubTableName +"正要加载>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
@@ -52,6 +55,7 @@ object NewSumTest {
     // 读取MySQL数据
     val jdbcDF = spark.read
       .format("jdbc")
+      .option("driver","com.mysql.jdbc.Driver")
       .option("url", "jdbc:mysql://" + address)
       .option("dbtable", dbName + "." + oneSubTableName) //dbName.tableName
       //.option("dbtable", "4399_cnbbs.thread_image_like_user_9")
@@ -78,6 +82,7 @@ object NewSumTest {
     // 读取MySQL数据
     val jdbcDF = spark.read
       .format("jdbc")
+      .option("driver","com.mysql.jdbc.Driver")
       .option("url", "jdbc:mysql://" + address)
       .option("dbtable", dbName + "." + tableName) //dbName.tableName
       //.option("dbtable", "4399_cnbbs.thread_image_like_user_9")
