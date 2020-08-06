@@ -13,14 +13,19 @@ import java.util.Properties;
 public class ReaderUtil {
     public static String getInstanceConfString (String address, String userName, String password, String dbName,
                                          String tableName, String topic){
-
+        System.out.println("调用getInstanceConfString方法>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         String filterRegex = dbName + "\\\\..*";
         StringBuilder stringBuilder = null;
         BufferedReader br = null;
         String line = null;
         try {
             stringBuilder = new StringBuilder();
-            InputStream in= ReaderUtil.class.getClass().getResourceAsStream("/instance.properties");
+            System.out.println("开始创建文件输入流>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            InputStream in= ReaderUtil.class.getClass().getResourceAsStream("/instanceCzk.properties");
+
+            System.out.println("是否读取到文件instanceCzk.properties>>>>>>>>>>>>>>>>>>>" + in);
+            InputStream in2= ReaderUtil.class.getClass().getResourceAsStream("/instance.properties");
+            System.out.println("是否读取到文件instance.properties>>>>>>>>>>>>>>>>>>>" + in2);
             //InputStream in= ReaderUtil.class.getClass().getResourceAsStream("src/main/resources/instance.properties");
             br = new BufferedReader(new InputStreamReader(in));
             while ((line = br.readLine()) != null){
@@ -56,7 +61,6 @@ public class ReaderUtil {
         return null;
 
     }
-
 
 
 

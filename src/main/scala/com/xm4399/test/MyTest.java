@@ -1,5 +1,7 @@
 package com.xm4399.test;
 
+import com.xm4399.util.ReaderUtil;
+
 import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,7 +21,10 @@ public class MyTest {
         return sb.toString();
     }
     public static void main(String[] args) throws IOException {
-        System.out.println(getJarFile());
+        InputStream in= ReaderUtil.class.getClass().getResourceAsStream("/itanceCzk.properties");
+        System.out.println(in);
+        //InputStream in= ReaderUtil.class.getClass().getResourceAsStream("src/main/resources/instance.properties");
+        BufferedReader br = new BufferedReader(new InputStreamReader(in));
     }
 
 

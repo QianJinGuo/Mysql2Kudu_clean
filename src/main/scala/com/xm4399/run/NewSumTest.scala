@@ -1,5 +1,7 @@
 package com.xm4399.run
 
+import java.util
+
 import com.xm4399.realtime.RealTimeIncrease2Kudu
 import com.xm4399.run.SumTest.{ReadMysqlSubTable2Kudu, readMysql2Kudu}
 import com.xm4399.util.{CreateAndStartInstance_2, CreateKuduTable2, GetTableStru, ListAllSubTableName}
@@ -22,14 +24,14 @@ object NewSumTest {
     val tableName = args(4);
     val isSubTable = args(5);
     val isRealtime = args(6);
-    val tableStru = GetTableStru.getTableStru2(address, username, password, dbName, tableName, isSubTable)
+    //val tableStru = GetTableStru.getTableStru2(address, username, password, dbName, tableName, isSubTable)
     //获取mysql表的字段名数组,用在分表时的 dataFrame的列位置的调整
-    val fieldNameArr :Array[String] = CreateKuduTable2.createKuduTable(tableStru, tableName, isSubTable)
-    println("未进入分表方法>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+    //val fieldNameArr :Array[String] = CreateKuduTable2.createKuduTable(tableStru, tableName, isSubTable)
+
+
     if ("true".equals(isSubTable)) {
-      println("进入分表方法>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+      val fieldNameArr = CreateKuduTable2.listKuduFieldName(tableName).asScala.toList
       val spark = SparkSession.builder().master("local").appName("SparkKuduApp").getOrCreate()
-      println("获取spark>>>>>>>>>>>>>>>>>>>>>>>>>>>")
       val subTableNameList = ListAllSubTableName.listAllSmallTableName2(address, username, password, dbName, tableName).asScala
       for(oneSubTableName <- subTableNameList){
         println("表   "+ oneSubTableName +"正要加载>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
@@ -40,14 +42,14 @@ object NewSumTest {
     }else{
       readMysql2Kudu(address, username, password, dbName,tableName)
     }
-    if (!"false".equals(isRealtime)){
+   /* if (!"false".equals(isRealtime)){
       CreateAndStartInstance_2.createAndStartInstance(address, username, password, dbName, tableName, isRealtime);
       new RealTimeIncrease2Kudu().realTimeIncrease(isSubTable);
-    }
+    }*/
 
   }
 
-  def ReadMysqlSubTable2Kudu(spark: SparkSession, address: String, username: String, password: String, dbName: String, tableName : String, oneSubTableName: String, array: Array[String]): Unit = {
+  def ReadMysqlSubTable2Kudu(spark: SparkSession, address: String, username: String, password: String, dbName: String, tableName : String, oneSubTableName: String, fieldNameList:  List[String]): Unit = {
     //val spark = SparkSession.builder().master("local").appName("SparkKuduApp").getOrCreate()
     // 获取分表的table_id
     val table_id_str = oneSubTableName.substring(oneSubTableName.lastIndexOf("_") + 1, oneSubTableName.length)
@@ -64,7 +66,9 @@ object NewSumTest {
       .load()
       .withColumn("table_id",lit(table_id)) //分表的情况下,kudu表相比于mysql分表,多了table_name主键
     // 调整df列的位置,table_name必须第一列
-    val jdbcDF2 = jdbcDF.selectExpr(array:_*)
+    val jdbcDF2 = jdbcDF.selectExpr(fieldNameList:_*)
+    /*val x = List(1,2,3)
+    val jdbcDF2 = jdbcDF.selectExpr(x:_*)*/
     val KUDU_MASTERS = "10.20.0.197:7051,10.20.0.198:7051,10.20.0.199:7051"
     // 将数据过滤后写入Kudu
     jdbcDF2
@@ -74,11 +78,11 @@ object NewSumTest {
       .option("kudu.master", KUDU_MASTERS)
       .option("kudu.table", tableName)
       .save()
-
   }
 
   def readMysql2Kudu(address: String, username: String, password: String, dbName: String, tableName: String): Unit = {
     val spark = SparkSession.builder().master("local").appName("SparkKuduApp").getOrCreate()
+    //val spark = SparkSession.builder().appName("SparkKuduApp").getOrCreate()
     // 读取MySQL数据
     val jdbcDF = spark.read
       .format("jdbc")

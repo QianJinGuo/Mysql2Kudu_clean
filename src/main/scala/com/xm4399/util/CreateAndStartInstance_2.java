@@ -191,14 +191,15 @@ public class CreateAndStartInstance_2 {
 
     public static void createAndStartInstance (String address, String userName, String password, String dbName,
                                                String tableName, String topic) {
-        System.out.println(topic);
+        //System.out.println(topic);
         String token = login();
-        String instanceName = tableName;
-        ReaderUtil readerUtil = new ReaderUtil();
-        String insanceConf = readerUtil.getInstanceConfString(address, userName, password, dbName, tableName, topic );
+        //String instanceName = tableName;
+       // ReaderUtil readerUtil = new ReaderUtil();
+        System.out.println("开始调用getInstanceConfString方法>>>>>>>>>>>>>>>>");
+        String insanceConf = ReaderUtil.getInstanceConfString(address, userName, password, dbName, tableName, topic );
         System.out.println("输出instanceConf>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" +insanceConf);
-        createInstance(token, instanceName, insanceConf);
-        String instanceID = getIstanceID(token,instanceName);
+        createInstance(token, tableName, insanceConf);
+        String instanceID = getIstanceID(token,tableName);
         startInstance(token,instanceID);
     }
 

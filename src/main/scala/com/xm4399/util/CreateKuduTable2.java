@@ -4,9 +4,7 @@ import com.xm4399.test.TwoTypeCon;
 import org.apache.kudu.ColumnSchema;
 import org.apache.kudu.Schema;
 import org.apache.kudu.Type;
-import org.apache.kudu.client.CreateTableOptions;
-import org.apache.kudu.client.KuduClient;
-import org.apache.kudu.client.KuduSession;
+import org.apache.kudu.client.*;
 import org.apache.kudu.shaded.com.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;
@@ -15,6 +13,25 @@ import java.util.List;
 import java.util.Map;
 
 public class CreateKuduTable2 {
+
+
+
+    public static List<String> listKuduFieldName(String tableName) throws KuduException {
+        KuduClient kuduClient = new KuduClient.KuduClientBuilder("10.20.0.197:7051,10.20.0.198:7051,10.20.0.199:7051")
+                .defaultAdminOperationTimeoutMs(60000).defaultOperationTimeoutMs(60000).build();
+        KuduTable kuduTable = kuduClient.openTable(tableName);
+        Schema colSchema =kuduTable.getSchema();
+        List<ColumnSchema> colList = colSchema.getColumns();
+        List<String> fieldNameList = new ArrayList<String>();
+        for(ColumnSchema item : colList){
+            String colName = item.getName();
+            System.out.println("kudu表字段名>>>>>>>>>>>>>>" + colName);
+            fieldNameList.add(colName);
+        }
+        return fieldNameList;
+
+    }
+
 
     //根据传入的字段结构建kudu表,并返回字段名的数组
     public  static String[] createKuduTable(LinkedHashMap<String,String[]> fieldInfoMap, String tableName, String isSubTable){
