@@ -132,10 +132,9 @@
       <artifactId>kafka-clients</artifactId>
       <version>${kafka.version}</version>
 
-      <!--<scope>provided</scope>-->
       <scope>provided</scope>
-
     </dependency>
+
     <dependency>
       <groupId>com.alibaba</groupId>
       <artifactId>fastjson</artifactId>
@@ -159,10 +158,6 @@
         <exclusion>
           <artifactId>chill_2.11</artifactId>
           <groupId>com.twitter</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>commons-lang3</artifactId>
-          <groupId>org.apache.commons</groupId>
         </exclusion>
         <exclusion>
           <artifactId>lz4-java</artifactId>
@@ -213,7 +208,7 @@
           <groupId>org.slf4j</groupId>
         </exclusion>
       </exclusions>
-      <!-- <scope>runtime</scope>-->
+       <scope>runtime</scope>
     </dependency>
 
     <dependency>
@@ -227,7 +222,7 @@
       <groupId>org.apache.flink</groupId>
       <artifactId>flink-shaded-guava</artifactId>
       <version>18.0-11.0</version>
-      <scope>provided</scope>
+     <!-- <scope>provided</scope>-->
     </dependency>
 
   </dependencies>
