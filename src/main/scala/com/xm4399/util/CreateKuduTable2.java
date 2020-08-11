@@ -16,14 +16,14 @@ public class CreateKuduTable2 {
 
 
 
-    public static List<String> listKuduFieldName(String tableName) throws KuduException {
+    public static List<String> listKuduFieldName(String kuduTableName) throws KuduException {
         KuduClient kuduClient = new KuduClient.KuduClientBuilder("10.20.0.197:7051,10.20.0.198:7051,10.20.0.199:7051")
                 .defaultAdminOperationTimeoutMs(60000).defaultOperationTimeoutMs(60000).build();
-        KuduTable kuduTable = kuduClient.openTable(tableName);
+        KuduTable kuduTable = kuduClient.openTable(kuduTableName);
         Schema colSchema =kuduTable.getSchema();
         List<ColumnSchema> colList = colSchema.getColumns();
         List<String> fieldNameList = new ArrayList<String>();
-        for(ColumnSchema item : colList){
+        for (ColumnSchema item : colList){
             String colName = item.getName();
             System.out.println("kudu表字段名>>>>>>>>>>>>>>" + colName);
             fieldNameList.add(colName);
