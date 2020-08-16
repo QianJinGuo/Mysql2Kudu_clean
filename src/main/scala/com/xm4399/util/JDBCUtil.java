@@ -59,6 +59,22 @@ public class JDBCUtil {
         return  confInfoArr;
     }
 
+    public static void updateFullPull( String jobID )  {
+        Connection connection = null;
+        Statement stmt = null;
+        try {
+            connection = getConnection();
+            stmt = connection.createStatement();
+            String sql = "update data_syn_status set full_pull_status =1 where job_id = " + jobID + ";";
+            stmt.executeUpdate(sql);
+            stmt.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            close(connection);
+        }
+    }
+
     public static Connection getConnection (){
         Connection connection = null;
         try {

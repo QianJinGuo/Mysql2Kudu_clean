@@ -35,9 +35,10 @@ object NewSumTest {
         ReadMysqlSubTable2Kudu(spark, address, username, password, dbName, tableName, oneSubTableName, fieldNameArr, kuduTableName, fields)
         println("表   "+ oneSubTableName +"加载完毕>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
       }
+      JDBCUtil.updateFullPull(jobID)
       spark.close()
     }else{
-      readMysql2Kudu(address, username, password, dbName,tableName, kuduTableName,  fields)
+      readMysql2Kudu(address, username, password, dbName,tableName, kuduTableName,  fields, jobID)
     }
   }
 
@@ -81,7 +82,7 @@ object NewSumTest {
       .save()
   }
 
-  def readMysql2Kudu(address: String, username: String, password: String, dbName: String, tableName: String, kuduTableName: String, fields :String): Unit = {
+  def readMysql2Kudu(address: String, username: String, password: String, dbName: String, tableName: String, kuduTableName: String, fields :String, jobID : String): Unit = {
     //val spark = SparkSession.builder().appName("MysqlFullPullKudu").getOrCreate()
     val spark = SparkSession.builder().appName("MysqlFullPullKudu").getOrCreate()
     // 读取MySQL数据
@@ -108,6 +109,7 @@ object NewSumTest {
       .option("kudu.table", kuduTableName)
       .save()
     spark.close()
+    JDBCUtil.updateFullPull(jobID)
 
   }
 
