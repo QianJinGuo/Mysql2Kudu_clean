@@ -74,6 +74,39 @@ public class JDBCUtil {
             close(connection);
         }
     }
+    // 全量拉取过程中,出现异常的情况
+    public static void updateExceptionFullPull( String jobID )  {
+        Connection connection = null;
+        Statement stmt = null;
+        try {
+            connection = getConnection();
+            stmt = connection.createStatement();
+            String sql = "update data_syn_status set full_pull_status = -1 where job_id = " + jobID + ";";
+            stmt.executeUpdate(sql);
+            stmt.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            close(connection);
+        }
+    }
+
+    // 全量拉取过程中,正在工作的情况
+    public static void updateRunningFullPull( String jobID )  {
+        Connection connection = null;
+        Statement stmt = null;
+        try {
+            connection = getConnection();
+            stmt = connection.createStatement();
+            String sql = "update data_syn_status set full_pull_status = 2 where job_id = " + jobID + ";";
+            stmt.executeUpdate(sql);
+            stmt.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            close(connection);
+        }
+    }
 
     public static Connection getConnection (){
         Connection connection = null;

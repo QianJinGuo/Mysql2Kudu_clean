@@ -27,18 +27,30 @@ object NewSumTest {
 
 
     if ("true".equals(isSubTable)) {
-      val fieldNameArr = CreateKuduTable2.listKuduFieldName(kuduTableName).asScala.toList
-      val spark = SparkSession.builder().appName("MysqlFullPullKudu").getOrCreate()
-      val subTableNameList = ListAllSubTableName.listAllSmallTableName2(address, username, password, dbName, tableName).asScala
-      for(oneSubTableName <- subTableNameList){
-        println("表   "+ oneSubTableName +"正要加载>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-        ReadMysqlSubTable2Kudu(spark, address, username, password, dbName, tableName, oneSubTableName, fieldNameArr, kuduTableName, fields)
-        println("表   "+ oneSubTableName +"加载完毕>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+      try {
+        // 记录全量拉取running状态
+        JDBCUtil.updateRunningFullPull(jobID)
+        val fieldNameArr = CreateKuduTable2.listKuduFieldName(kuduTableName).asScala.toList
+        val spark = SparkSession.builder().appName("MysqlFullPullKudu").getOrCreate()
+        val subTableNameList = ListAllSubTableName.listAllSmallTableName2(address, username, password, dbName, tableName).asScala
+        for(oneSubTableName <- subTableNameList){
+          println("表   "+ oneSubTableName +"正要加载>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+          ReadMysqlSubTable2Kudu(spark, address, username, password, dbName, tableName, oneSubTableName, fieldNameArr, kuduTableName, fields)
+          println("表   "+ oneSubTableName +"加载完毕>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+        }
+        // 记录全量拉取完成的状态
+        JDBCUtil.updateFullPull(jobID)
+        spark.close()
+      } catch {
+        case e : Exception => JDBCUtil.updateExceptionFullPull(jobID)
       }
-      JDBCUtil.updateFullPull(jobID)
-      spark.close()
+
     }else{
-      readMysql2Kudu(address, username, password, dbName,tableName, kuduTableName,  fields, jobID)
+      try{
+        readMysql2Kudu(address, username, password, dbName,tableName, kuduTableName,  fields, jobID)
+      } catch {
+          case e : Exception => JDBCUtil.updateExceptionFullPull(jobID)
+      }
     }
   }
 
