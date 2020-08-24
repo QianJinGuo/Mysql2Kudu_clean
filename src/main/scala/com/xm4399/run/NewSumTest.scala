@@ -47,6 +47,8 @@ object NewSumTest {
 
     }else{
       try{
+        // 记录全量拉取running状态
+        JDBCUtil.updateRunningFullPull(jobID)
         readMysql2Kudu(address, username, password, dbName,tableName, kuduTableName,  fields, jobID)
       } catch {
           case e : Exception => JDBCUtil.updateExceptionFullPull(jobID)
