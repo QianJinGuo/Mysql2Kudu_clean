@@ -32,7 +32,7 @@ object NewSumTest {
         JDBCUtil.updateRunningFullPull(jobID)
         val fieldNameArr = CreateKuduTable2.listKuduFieldName(kuduTableName).asScala.toList
         val spark = SparkSession.builder().appName("MysqlFullPullKudu").getOrCreate()
-        val subTableNameList = ListAllSubTableName.listAllSmallTableName2(address, username, password, dbName, tableName).asScala
+        val subTableNameList = ListAllSubTableName.listAllSubTableName(address, username, password, dbName, tableName).asScala
         for(oneSubTableName <- subTableNameList){
           println("表   "+ oneSubTableName +"正要加载>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
           ReadMysqlSubTable2Kudu(spark, address, username, password, dbName, tableName, oneSubTableName, fieldNameArr, kuduTableName, fields)
