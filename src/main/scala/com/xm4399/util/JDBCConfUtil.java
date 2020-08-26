@@ -10,7 +10,7 @@ import java.sql.Statement;
  * @Date: 2020/8/13
  * @Description:
  */
-public class JDBCUtil {
+public class JDBCConfUtil {
     // 根据jobID获取数据同步任务的配置参数
     public static String[] getConfInfoArr(String jobID){
         String[] confInfoArr = new String[10];
