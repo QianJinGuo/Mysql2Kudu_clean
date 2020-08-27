@@ -17,22 +17,22 @@ object GetKuduRowsCount {
     val kuduClient = new KuduClient.KuduClientBuilder("10.20.0.197:7051,10.20.0.198:7051,10.20.0.199:7051").build()
 
     // 设置表名
-    val tableName = "default.czk_cmt_user_0"
+    val tableName = "default.czk_num_flase_false"
 
     // 获得表的连接
     val kuduTable = kuduClient.openTable(tableName)
 
     // 设置查询条件
-    val dateline: Long = 1598429000L
+    val dateline: Long = 1593510500L
     val schema = kuduTable.getSchema()
-    val create_time = KuduPredicate.newComparisonPredicate(schema.getColumn("create_time"), KuduPredicate.ComparisonOp.LESS_EQUAL, dateline)
+    val create_time = KuduPredicate.newComparisonPredicate(schema.getColumn("dateline"), KuduPredicate.ComparisonOp.LESS_EQUAL, dateline)
    /* val age = KuduPredicate.newComparisonPredicate(schema.getColumn("age"), KuduPredicate.ComparisonOp.LESS, 22)
     val city = KuduPredicate.newComparisonPredicate(schema.getColumn("city"), KuduPredicate.ComparisonOp.EQUAL, "beijing")*/
 
     // 执行查询操作
     val builder = kuduClient.newScannerBuilder(kuduTable)
       //.setProjectedColumnNames(List("create_time", "age", "city").asJava)
-      .setProjectedColumnNames(List("create_time").asJava)
+      .setProjectedColumnNames(List("id").asJava)
       .addPredicate(create_time)
       .build()
     var sum_count : Long = 0L
