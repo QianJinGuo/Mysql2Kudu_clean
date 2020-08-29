@@ -10,9 +10,9 @@ import scala.collection.JavaConverters._
 object GetKuduRowsCount {
 
   def main(args: Array[String]): Unit = {
-    getkuduRowsCount()
+    //getkuduRowsCount()
   }
-  def getkuduRowsCount() :Unit ={
+  def getkuduRowsCount(kuduTabelName : String, timestampFieldName : String, timestampCount : Long) :Unit ={
     // 创建kudu连接
     val kuduClient = new KuduClient.KuduClientBuilder("10.20.0.197:7051,10.20.0.198:7051,10.20.0.199:7051").build()
 

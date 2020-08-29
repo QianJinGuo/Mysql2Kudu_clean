@@ -13,31 +13,22 @@ import java.util.Map;
  */
 public class CollectUtil {
 
-    public ArrayList<String> listAllMysqlFields(ArrayList<LinkedHashMap<String,String>> fieldsInfoList){
+    public ArrayList<String> listAllMysqlFields(LinkedHashMap<String,String> fieldAndIsPKMap){
         ArrayList<String> allFieldsList = new ArrayList<String>();
-        for (LinkedHashMap<String,String> map : fieldsInfoList){
-            for (Map.Entry<String,String>  entry : map.entrySet()){
-                String field = entry.getKey();
-                System.out.println("allFiledsList存入 "+field);
-                allFieldsList.add(field);
-            }
+        for (Map.Entry<String,String>  fieldInfo : fieldAndIsPKMap.entrySet()){
+            allFieldsList.add(fieldInfo.getKey());
         }
         return allFieldsList;
     }
 
-    public ArrayList<String> listMysqlPriKey(ArrayList<LinkedHashMap<String,String>> fieldsInfoList){
+    public ArrayList<String> listMysqlPriKey(LinkedHashMap<String,String> fieldAndIsPKMap ){
         ArrayList<String> priKeyList = new ArrayList<String>();
-        for (LinkedHashMap<String,String> map : fieldsInfoList){
-            for (Map.Entry<String,String>  entry : map.entrySet()){
-                String isRtiKey = entry.getValue();
-                String field = entry.getKey();
-                if ("PRI".equals(isRtiKey)){
-                    System.out.println("mysql主键有>>>"+ field);
-                    priKeyList.add(field);
-                }
-
+        for (Map.Entry<String,String>  fieldInfo : fieldAndIsPKMap.entrySet()){
+            if ("PRI".equals(fieldInfo.getValue())){
+                priKeyList.add(fieldInfo.getKey());
             }
         }
+
         return priKeyList;
     }
 

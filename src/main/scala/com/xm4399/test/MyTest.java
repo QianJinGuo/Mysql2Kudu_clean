@@ -21,10 +21,8 @@ public class MyTest {
         return sb.toString();
     }
     public static void main(String[] args) throws IOException {
-        InputStream in= ReaderUtil.class.getClass().getResourceAsStream("/itanceCzk.properties");
-        System.out.println(in);
-        //InputStream in= ReaderUtil.class.getClass().getResourceAsStream("src/main/resources/instance.properties");
-        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+     Long l = 1L;
+        System.out.println(String.valueOf(l));
     }
 
 

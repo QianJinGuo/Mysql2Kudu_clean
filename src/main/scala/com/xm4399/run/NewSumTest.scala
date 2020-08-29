@@ -1,6 +1,6 @@
 package com.xm4399.run
 
-import com.xm4399.util.{CreateKuduTable2, JDBCConfUtil, ListAllSubTableName}
+import com.xm4399.util.{CreateKuduTable2, JDBCConfUtil, JDBCOnlineUtil, ListAllSubTableName}
 import org.apache.spark.sql.functions.lit
 import org.apache.spark.sql.{SaveMode, SparkSession}
 
@@ -20,9 +20,9 @@ object NewSumTest {
     val password = confInfoArr(2);
     val dbName = confInfoArr(3);
     val tableName = confInfoArr(4);
+    val fields = confInfoArr(5)
     val isSubTable = confInfoArr(6);
     val kuduTableName = confInfoArr(8)
-    val fields = confInfoArr(9)
 
 
     if ("true".equals(isSubTable)) {
@@ -31,7 +31,7 @@ object NewSumTest {
         JDBCConfUtil.updateRunningFullPull(jobID)
         val fieldNameArr = CreateKuduTable2.listKuduFieldName(kuduTableName).asScala.toList
         val spark = SparkSession.builder().appName("MysqlFullPullKudu").getOrCreate()
-        val subTableNameList = ListAllSubTableName.listAllSubTableName(address, username, password, dbName, tableName).asScala
+        val subTableNameList = new JDBCOnlineUtil().listAllSubTableName(address, username, password, dbName, tableName).asScala
         for(oneSubTableName <- subTableNameList){
           println("表   "+ oneSubTableName +"正要加载>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
           ReadMysqlSubTable2Kudu(spark, address, username, password, dbName, tableName, oneSubTableName, fieldNameArr, kuduTableName, fields)
@@ -43,8 +43,7 @@ object NewSumTest {
       } catch {
         case e : Exception => JDBCConfUtil.updateExceptionFullPull(jobID)
       }
-
-    }else{
+    }else {
       try{
         // 记录全量拉取running状态
         JDBCConfUtil.updateRunningFullPull(jobID)
@@ -79,7 +78,7 @@ object NewSumTest {
       jdbcDF = jdbcDF.selectExpr(allFieldsArr:_*)
 
     } else {
-      jdbcDF = jdbcDF.selectExpr(fieldNameList:_*)
+      //jdbcDF = jdbcDF.selectExpr(fieldNameList:_*)
     }
 
     // 调整df列的位置,table_name必须第一列

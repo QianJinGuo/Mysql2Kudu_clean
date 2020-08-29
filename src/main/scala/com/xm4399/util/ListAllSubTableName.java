@@ -25,7 +25,6 @@ public class ListAllSubTableName {
                 String smallTableName = res.getString(1);
                 System.out.println("将表  " + smallTableName +"  加入集合>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
                 allSmallTableList.add(smallTableName);
-
             }
             res.close();
             stmt.close();

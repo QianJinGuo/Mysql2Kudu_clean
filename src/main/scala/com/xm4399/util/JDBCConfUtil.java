@@ -36,6 +36,7 @@ public class JDBCConfUtil {
                 String topic = res.getString(9);
                 String kudu_table_name = res.getString(10);
                 String mode = res.getString(11);
+                String timestampFieldName = res.getString(12);
                 confInfoArr[0] = address;
                 confInfoArr[1] = username;
                 confInfoArr[2] = password;
@@ -46,6 +47,7 @@ public class JDBCConfUtil {
                 confInfoArr[7] = topic;
                 confInfoArr[8] = kudu_table_name;
                 confInfoArr[9] = mode;
+                confInfoArr[10] = timestampFieldName;
             }
             res.close();
             stmt.close();

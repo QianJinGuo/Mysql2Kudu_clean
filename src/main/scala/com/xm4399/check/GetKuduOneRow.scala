@@ -22,6 +22,7 @@ object GetKuduOneRow {
     val schema = kuduTable.getSchema()
     // 遍历kudu表主键集合,进行添加条件查询
     for ((priKey, value) <- map){
+      println("kudu scan 添加条件 >>PK为 " + priKey + "  值为 " +value)
       scanner.addPredicate(KuduPredicate.newComparisonPredicate(schema.getColumn(priKey), KuduPredicate.ComparisonOp.EQUAL, value))//
     }
     val builder = scanner.build()
