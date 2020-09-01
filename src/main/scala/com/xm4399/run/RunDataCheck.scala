@@ -1,8 +1,7 @@
 package com.xm4399.run
 
-import com.xm4399.check.CheckMysqlAndKudu.checkSubTable
-import com.xm4399.check.{CheckMysqlAndKudu, KuduUtil}
-import com.xm4399.util.{JDBCUtil, JDBCErrorLogAndCheckUtil, JDBCOnlineUtil}
+import com.xm4399.util.SampleCheck.checkSubTable
+import com.xm4399.util.{ JDBCOnlineUtil, JDBCUtil, KuduUtil2, SampleCheck}
 
 import scala.collection.JavaConverters._
 /**
@@ -26,10 +25,8 @@ object RunDataCheck {
     val timestampFieldName = confInfoArr(10)
     //------------------------------------------------------
     val countResult = checkCount(jobID, address, username, password, dbName, tableName, isSubTable, kuduTableName, timestampFieldName, timestampStr)
-    println("记录数检查结果为 " + countResult)
-    val sampleResult = CheckMysqlAndKudu.checkBetweenMysqlAndKudu(jobID)
-    println("抽样检查结果为 " + sampleResult)
-    new JDBCErrorLogAndCheckUtil().insertCheckInfo(jobID, countResult, sampleResult )
+    val sampleResult = SampleCheck.checkBetweenMysqlAndKudu(jobID)
+    new JDBCUtil().insertCheckInfo(jobID, countResult, sampleResult )
   }
 
 
@@ -48,18 +45,16 @@ object RunDataCheck {
       }
     } else {
       println("isSubTable参数有误")
+      val errorMsg = "isSubTable参数有误";
+      new JDBCUtil().insertErroeInfo(jobID, "CheckData", errorMsg);
     }
     // kudu表记录数
-    val kuduCount = KuduUtil.getkuduRowsCount(kuduTableName, timestampFieldName, timestampStr)
+    val kuduCount = KuduUtil2.getkuduRowsCount(kuduTableName, timestampFieldName, timestampStr)
     if (mysqlCount == kuduCount){
-      println("mysql和kudu记录数相等")
       true
     } else {
-      println("mysql: "+mysqlCount)
-      println("kudu: "+ kuduCount)
-      println("mysql和kudu记录数不相等")
       val errorMsg = "mysql记录数为 " + mysqlCount + ",  kudu记录数为 "  + kuduCount;
-      new JDBCErrorLogAndCheckUtil().insertErroeInfo(jobID, "CheckData", errorMsg);
+      new JDBCUtil().insertErroeInfo(jobID, "CheckData", errorMsg);
       false
     }
   }

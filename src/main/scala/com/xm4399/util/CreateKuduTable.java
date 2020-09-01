@@ -1,6 +1,5 @@
 package com.xm4399.util;
 
-import com.xm4399.test.TwoTypeCon;
 import org.apache.kudu.ColumnSchema;
 import org.apache.kudu.Schema;
 import org.apache.kudu.Type;
@@ -12,7 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CreateKuduTable2 {
+public class CreateKuduTable {
 
 
 
@@ -32,7 +31,7 @@ public class CreateKuduTable2 {
     }
 
 
-    //根据传入的字段结构建kudu表,并返回字段名的数组
+/*    //根据传入的字段结构建kudu表,并返回字段名的数组
     public  static String[] createKuduTable(LinkedHashMap<String,String[]> fieldInfoMap, String tableName, String isSubTable){
         KuduClient client = new KuduClient.KuduClientBuilder("10.20.0.197:7051,10.20.0.198:7051,10.20.0.199:7051")
                                 .defaultAdminOperationTimeoutMs(60000).build();
@@ -94,7 +93,7 @@ public class CreateKuduTable2 {
             return fieldNameArr;
         } catch (Exception e) {
             e.printStackTrace();
-        } /*finally {
+        } *//*finally {
             try {
 //          client.deleteTable(tableName);
             } catch (Exception e) {
@@ -106,7 +105,7 @@ public class CreateKuduTable2 {
                     e.printStackTrace();
                 }
             }
-        }*/
+        }*//*
         return fieldNameArr;
-    }
+    }*/
 }

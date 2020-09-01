@@ -68,7 +68,6 @@ public class JDBCOnlineUtil {
                 if (fieldsList.contains(name)){
                     fieldInfoMap.put(name, isKey);
                 }
-
             }
             if (fieldInfoMap.size() ==0 ){
                 System.out.println("该表 " + tableName + " 不存在" );
@@ -126,7 +125,6 @@ public class JDBCOnlineUtil {
             Long count = res.getLong(1);
             System.out.println("记录数为 >>>>" + count);
             return count;
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -136,15 +134,6 @@ public class JDBCOnlineUtil {
         }
         return -1L;
     }
-
-    public static void main(String[] args) throws SQLException {
-      /*  JDBCOnlineUtil j =new JDBCOnlineUtil();
-        j.getTableCount("10.0.0.92:3310", "cnbbsReadonly","LLKFN*k241235",
-                "4399_cnbbs","thread_image_like_num_0", "create_time","1598706451L);*/
-
-    }
-
-
 
     public  Connection getConnection (String address, String username, String password,String dbName){
         Connection connection = null;

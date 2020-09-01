@@ -1,11 +1,11 @@
-package com.xm4399.test
+package com.xm4399.util
 
 /**
  * @Auther: czk
- * @Date: 2020/8/31 
+ * @Date: 2020/9/1 
  * @Description:
  */
-object CollectTest {
+object OtherUtil2 {
   def isSameFromTwoMap (map1: Map[String,Any], map2: Map[String,Any]) : Boolean={
     if (map1.size != map2.size){
       return false
@@ -21,5 +21,4 @@ object CollectTest {
     }
     true
   }
-
 }

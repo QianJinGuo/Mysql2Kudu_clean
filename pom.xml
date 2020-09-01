@@ -19,7 +19,6 @@
     <scala.binary.version>2.11</scala.binary.version>
   </properties>
 
-
   <repositories>
     <repository>
       <id>scala-tools.org</id>
@@ -35,7 +34,6 @@
       <url>http://scala-tools.org/repo-releases</url>
     </pluginRepository>
   </pluginRepositories>
-
 
   <dependencies>
     <dependency>
@@ -55,8 +53,6 @@
           <groupId>org.scala-lang</groupId>
         </exclusion>
       </exclusions>
-
-      <!--<scope>provided</scope>-->
     </dependency>
 
     <dependency>
@@ -65,43 +61,6 @@
       <version>${scala.version}</version>
       <!--<scope>provided</scope>-->
     </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
-      <version>4.5.2</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>commons-codec</artifactId>
-          <groupId>commons-codec</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>httpcore</artifactId>
-          <groupId>org.apache.httpcomponents</groupId>
-        </exclusion>
-      </exclusions>
-
-    </dependency>
-
-    <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
-    <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-      <version>1.10</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore -->
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpcore</artifactId>
-      <version>4.4.6</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>commons-logging</groupId>
-      <artifactId>commons-logging</artifactId>
-      <version>1.2</version>
-      <scope>provided</scope>
-    </dependency>
-
 
     <dependency>
       <groupId>mysql</groupId>
@@ -113,7 +72,6 @@
       <groupId>org.apache.kudu</groupId>
       <artifactId>kudu-client</artifactId>
       <version>1.10.0</version>
-
     </dependency>
 
     <dependency>
@@ -139,10 +97,7 @@
           <artifactId>scala-library</artifactId>
           <groupId>org.scala-lang</groupId>
         </exclusion>
-
       </exclusions>
-
-      <!--<scope>provided</scope>-->
     </dependency>
 
     <dependency>
@@ -179,124 +134,12 @@
           <groupId>org.xerial.snappy</groupId>
         </exclusion>
       </exclusions>
-      <!--<scope>provided</scope>-->
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.kafka</groupId>
-      <artifactId>kafka-clients</artifactId>
-      <version>${kafka.version}</version>
-
-      <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>slf4j-api</artifactId>
-          <groupId>org.slf4j</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>snappy-java</artifactId>
-          <groupId>org.xerial.snappy</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
       <groupId>com.alibaba</groupId>
       <artifactId>fastjson</artifactId>
       <version>1.2.54</version>
-    </dependency>
-
-
-    <dependency>
-      <groupId>org.apache.flink</groupId>
-      <artifactId>flink-java</artifactId>
-      <version>${flink.version}</version>
-      <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>commons-compress</artifactId>
-          <groupId>org.apache.commons</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>commons-lang3</artifactId>
-          <groupId>org.apache.commons</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>commons-math3</artifactId>
-          <groupId>org.apache.commons</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>objenesis</artifactId>
-          <groupId>org.objenesis</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>slf4j-api</artifactId>
-          <groupId>org.slf4j</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
-
-    <dependency>
-      <groupId>org.apache.flink</groupId>
-      <artifactId>flink-clients_2.11</artifactId>
-      <version>${flink.version}</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>chill_2.11</artifactId>
-          <groupId>com.twitter</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>lz4-java</artifactId>
-          <groupId>org.lz4</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>scala-parser-combinators_2.11</artifactId>
-          <groupId>org.scala-lang.modules</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>slf4j-api</artifactId>
-          <groupId>org.slf4j</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>snappy-java</artifactId>
-          <groupId>org.xerial.snappy</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>commons-lang3</artifactId>
-          <groupId>org.apache.commons</groupId>
-        </exclusion>
-      </exclusions>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.flink</groupId>
-      <artifactId>flink-streaming-java_${scala.binary.version}</artifactId>
-      <version>${flink.version}</version>
-     <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>commons-math3</artifactId>
-          <groupId>org.apache.commons</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>slf4j-api</artifactId>
-          <groupId>org.slf4j</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.flink</groupId>
-      <artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
-      <version>${flink.version}</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>kafka-clients</artifactId>
-          <groupId>org.apache.kafka</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
@@ -319,12 +162,6 @@
       <scope>runtime</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.apache.flink</groupId>
-      <artifactId>flink-shaded-guava</artifactId>
-      <version>18.0-11.0</version>
-     <!-- <scope>provided</scope>-->
-    </dependency>
 
   </dependencies>
 

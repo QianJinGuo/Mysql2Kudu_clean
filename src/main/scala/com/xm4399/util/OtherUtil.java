@@ -7,10 +7,11 @@ import java.io.Writer;
 
 /**
  * @Auther: czk
- * @Date: 2020/8/30
+ * @Date: 2020/9/1
  * @Description:
  */
-public class ExceptionUtil {
+public class OtherUtil {
+    // 将异常信息转为string
     public  String getException(Exception e) {
         Writer writer = null;
         PrintWriter printWriter = null;

@@ -43,7 +43,6 @@ public class JDBCUtil {
                 confInfoArr[9] = mode;
                 confInfoArr[10] = timestampFieldName;
             }
-
             return confInfoArr;
         } catch (Exception e) {
             e.printStackTrace();
@@ -53,6 +52,67 @@ public class JDBCUtil {
 
         return  confInfoArr;
     }
+
+    public  void insertCheckInfo(String jobID, Boolean countResult, Boolean sampleResult)  {
+        Connection connection = null;
+        PreparedStatement pst =null ;
+        try {
+            connection = getConnection();
+            String sql = "insert into check_result (job_id, count_result,sample_result) values(?,?,?)";
+            pst = connection.prepareStatement(sql);
+            int  jobIDNum = Integer.parseInt(jobID);
+            String countResultStr = String.valueOf(countResult);
+            String sampleResultStr = String.valueOf(sampleResult);
+            pst.setInt(1,jobIDNum);
+            pst.setString(2,countResultStr);
+            pst.setString(3,sampleResultStr);
+            pst.executeUpdate();
+            pst.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                pst.close();
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                pst = null;
+                connection = null;
+            }
+        }
+    }
+
+
+    //写入报错信息
+    public  void insertErroeInfo(String jobID, String jobPart, String errorMsg)  {
+        Connection connection = null;
+        PreparedStatement pst =null ;
+        try {
+            connection = getConnection();
+            String sql = "insert into error_log (job_id, job_part, error_msg) values(?,?,?)";
+            pst = connection.prepareStatement(sql);
+            int  jobIDNum = Integer.parseInt(jobID);
+            pst.setInt(1,jobIDNum);
+            pst.setString(2,jobPart);
+            pst.setString(3,errorMsg);
+            pst.executeUpdate();
+            pst.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                pst.close();
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                pst = null;
+                connection = null;
+            }
+        }
+    }
+
 
     // 更改任务运行状态
     public  void updateJobState(String jobID, String jobState )  {
@@ -103,54 +163,4 @@ public class JDBCUtil {
             con = null;
         }
     }
- /*   public static void updateFullPull( String jobID )  {
-        Connection connection = null;
-        Statement stmt = null;
-        try {
-            connection = getConnection();
-            stmt = connection.createStatement();
-            String sql = "update data_syn_status set full_pull_status =1 where job_id = " + jobID + ";";
-            stmt.executeUpdate(sql);
-            stmt.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }finally {
-            close(connection);
-        }
-    }
-    // 全量拉取过程中,出现异常的情况
-    public static void updateExceptionFullPull( String jobID )  {
-        Connection connection = null;
-        Statement stmt = null;
-        try {
-            connection = getConnection();
-            stmt = connection.createStatement();
-            String sql = "update data_syn_status set full_pull_status = -1 where job_id = " + jobID + ";";
-            stmt.executeUpdate(sql);
-            stmt.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }finally {
-            close(connection);
-        }
-    }
-
-    // 全量拉取过程中,正在工作的情况
-    public static void updateRunningFullPull( String jobID )  {
-        Connection connection = null;
-        Statement stmt = null;
-        try {
-            connection = getConnection();
-            stmt = connection.createStatement();
-            String sql = "update data_syn_status set full_pull_status = 2 where job_id = " + jobID + ";";
-            stmt.executeUpdate(sql);
-            stmt.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }finally {
-            close(connection);
-        }
-    }*/
-
-
 }

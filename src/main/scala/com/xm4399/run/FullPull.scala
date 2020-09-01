@@ -1,6 +1,6 @@
 package com.xm4399.run
 
-import com.xm4399.util.{CreateKuduTable2, ExceptionUtil, JDBCUtil, JDBCErrorLogAndCheckUtil, JDBCOnlineUtil, ListAllSubTableName}
+import com.xm4399.util.{CreateKuduTable,  JDBCOnlineUtil, JDBCUtil, OtherUtil}
 import org.apache.spark.sql.functions.lit
 import org.apache.spark.sql.{SaveMode, SparkSession}
 
@@ -29,7 +29,7 @@ object FullPull {
       try {
         // 记录全量拉取running状态
         new JDBCUtil().updateJobState(jobID, "Running_FullPull");
-        val fieldNameArr = CreateKuduTable2.listKuduFieldName(kuduTableName).asScala.toList
+        val fieldNameArr = CreateKuduTable.listKuduFieldName(kuduTableName).asScala.toList
         val spark = SparkSession.builder().appName("MysqlFullPullKudu").getOrCreate()
         val subTableNameList = new JDBCOnlineUtil().listAllSubTableName(address, username, password, dbName, tableName).asScala
         for(oneSubTableName <- subTableNameList){
@@ -41,8 +41,8 @@ object FullPull {
       } catch {
         case e : Exception => {
           new JDBCUtil().updateJobState(jobID, "Failed_FullPull");
-          val errorMsg = new ExceptionUtil().getException(e)
-          new JDBCErrorLogAndCheckUtil().insertErroeInfo(jobID, "FullPull", errorMsg )
+          val errorMsg = new OtherUtil().getException(e)
+          new JDBCUtil().insertErroeInfo(jobID, "FullPull", errorMsg )
         }
       }
     }else {
@@ -53,8 +53,8 @@ object FullPull {
       } catch {
           case e : Exception => {
             new JDBCUtil().updateJobState(jobID, "Failed_FullPull");
-            val errorMsg = new ExceptionUtil().getException(e)
-            new JDBCErrorLogAndCheckUtil().insertErroeInfo(jobID, "FullPull", errorMsg )
+            val errorMsg = new OtherUtil().getException(e)
+            new JDBCUtil().insertErroeInfo(jobID, "FullPull", errorMsg )
           }
       }
     }
