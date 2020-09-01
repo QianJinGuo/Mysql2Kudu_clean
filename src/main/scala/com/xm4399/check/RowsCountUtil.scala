@@ -7,33 +7,24 @@ import scala.collection.JavaConverters._
  * @Date: 2020/8/26 
  * @Description:
  */
-object GetKuduRowsCount {
+object RowsCountUtil {
 
   def main(args: Array[String]): Unit = {
     //getkuduRowsCount()
   }
-  def getkuduRowsCount(kuduTabelName : String, timestampFieldName : String, timestampCount : Long) :Unit ={
-    // 创建kudu连接
+  def getkuduRowsCount(kuduTableName : String, timestampFieldName : String, timestampNum : String) :Long ={
     val kuduClient = new KuduClient.KuduClientBuilder("10.20.0.197:7051,10.20.0.198:7051,10.20.0.199:7051").build()
-
-    // 设置表名
-    val tableName = "default.czk_num_flase_false"
-
-    // 获得表的连接
-    val kuduTable = kuduClient.openTable(tableName)
-
+    val kuduTable = kuduClient.openTable(kuduTableName)
     // 设置查询条件
-    val dateline: Long = 1593510500L
+    val timestampLong: Long = timestampNum.toLong
     val schema = kuduTable.getSchema()
-    val create_time = KuduPredicate.newComparisonPredicate(schema.getColumn("dateline"), KuduPredicate.ComparisonOp.LESS_EQUAL, dateline)
-   /* val age = KuduPredicate.newComparisonPredicate(schema.getColumn("age"), KuduPredicate.ComparisonOp.LESS, 22)
-    val city = KuduPredicate.newComparisonPredicate(schema.getColumn("city"), KuduPredicate.ComparisonOp.EQUAL, "beijing")*/
+    val timestampLimit = KuduPredicate.newComparisonPredicate(schema.getColumn(timestampFieldName), KuduPredicate.ComparisonOp.LESS_EQUAL, timestampLong)
 
     // 执行查询操作
     val builder = kuduClient.newScannerBuilder(kuduTable)
       //.setProjectedColumnNames(List("create_time", "age", "city").asJava)
-      .setProjectedColumnNames(List("id").asJava)
-      .addPredicate(create_time)
+      //.setProjectedColumnNames(List("id").asJava)
+      .addPredicate(timestampLimit)
       .build()
     var sum_count : Long = 0L
     while (builder.hasMoreRows()) {
@@ -45,6 +36,7 @@ object GetKuduRowsCount {
     // 关闭kudu连接
     builder.close()
     kuduClient.close()
+    sum_count
   }
 
 }

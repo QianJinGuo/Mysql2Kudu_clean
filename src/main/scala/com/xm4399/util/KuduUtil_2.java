@@ -20,7 +20,6 @@ public class KuduUtil_2 {
         List<ColumnSchema> pkList = colSchema.getPrimaryKeyColumns();
         for(ColumnSchema item : pkList){
             String colName = item.getName();
-            System.out.println("kudu主键有>>>"+colName);
             kuduPriKeyList.add(colName);
         }
         return kuduPriKeyList;

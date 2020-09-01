@@ -25,7 +25,6 @@ public class CreateKuduTable2 {
         List<String> fieldNameList = new ArrayList<String>();
         for (ColumnSchema item : colList){
             String colName = item.getName();
-            System.out.println("kudu表字段名>>>>>>>>>>>>>>" + colName);
             fieldNameList.add(colName);
         }
         return fieldNameList;

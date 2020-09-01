@@ -31,9 +31,7 @@ public class JDBCOnlineUtil {
             res = stmt.executeQuery(sql);
             while (res.next()) {
                 String name = res.getString(1);
-                System.out.println("字段名为 >>>>" + name);
                 String isPriKey = res.getString(2);
-                System.out.println("是否主键为 >>>>" + isPriKey);
                 fieldAndIsPKMap.put(name,isPriKey);
             }
             if (fieldAndIsPKMap.size() ==0 ){
@@ -113,7 +111,7 @@ public class JDBCOnlineUtil {
 
     // 获取mysql表的记录数
     public  Long getTableCount(String address, String username, String password, String dbName, String tableName,
-                              String timestampField, Long timestamp) throws SQLException {
+                              String timestampField, String timestampStr) throws SQLException {
         Connection con = null;
         Statement stmt = null;
         ResultSet res = null;
@@ -121,9 +119,8 @@ public class JDBCOnlineUtil {
         try {
             con = getConnection(address, username, password, dbName);
             stmt = con.createStatement();
-            String timestampStr = String.valueOf(timestamp) ;
             //获取指定时间戳前的记录数
-            String sql = "select count(1) from " + tableName + " where " + timestampField + " <= " + timestamp  ;
+            String sql = "select count(1) from " + tableName + " where " + timestampField + " <= " + timestampStr  ;
             res = stmt.executeQuery(sql);
             res.next();
             Long count = res.getLong(1);
@@ -141,9 +138,9 @@ public class JDBCOnlineUtil {
     }
 
     public static void main(String[] args) throws SQLException {
-        JDBCOnlineUtil j =new JDBCOnlineUtil();
+      /*  JDBCOnlineUtil j =new JDBCOnlineUtil();
         j.getTableCount("10.0.0.92:3310", "cnbbsReadonly","LLKFN*k241235",
-                "4399_cnbbs","thread_image_like_num_0", "create_time",1598706451L);
+                "4399_cnbbs","thread_image_like_num_0", "create_time","1598706451L);*/
 
     }
 
