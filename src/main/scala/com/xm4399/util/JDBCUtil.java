@@ -88,6 +88,7 @@ public class JDBCUtil {
     public  void insertErroeInfo(String jobID, String jobPart, String errorMsg)  {
         Connection connection = null;
         PreparedStatement pst =null ;
+
         try {
             connection = getConnection();
             String sql = "insert into error_log (job_id, job_part, error_msg) values(?,?,?)";

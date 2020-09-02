@@ -1,6 +1,6 @@
 package com.xm4399.run
 
-import com.xm4399.util.{CreateKuduTable,  JDBCOnlineUtil, JDBCUtil, OtherUtil}
+import com.xm4399.util.{CreateKuduTable, JDBCOnlineUtil, JDBCUtil, OtherUtil}
 import org.apache.spark.sql.functions.lit
 import org.apache.spark.sql.{SaveMode, SparkSession}
 
@@ -15,6 +15,7 @@ object FullPull {
   def main(args: Array[String]): Unit = {
     val jobID= args(0)
     val confInfoArr = new JDBCUtil().getConfInfoArr(jobID)
+    println(confInfoArr.length)
     val address = confInfoArr(0);
     val username = confInfoArr(1);
     val password = confInfoArr(2);
@@ -23,8 +24,7 @@ object FullPull {
     val fields = confInfoArr(5)
     val isSubTable = confInfoArr(6);
     val kuduTableName = confInfoArr(8)
-
-
+    println(dbName + tableName)
     if ("true".equals(isSubTable)) {
       try {
         // 记录全量拉取running状态
@@ -53,8 +53,10 @@ object FullPull {
       } catch {
           case e : Exception => {
             new JDBCUtil().updateJobState(jobID, "Failed_FullPull");
-            val errorMsg = new OtherUtil().getException(e)
-            new JDBCUtil().insertErroeInfo(jobID, "FullPull", errorMsg )
+            /*var errorMsg = new OtherUtil().getException(e)
+            errorMsg = errorMsg.substring(0, 100)
+            new JDBCUtil().insertErroeInfo(jobID, "FullPull", errorMsg )*/
+            e.printStackTrace()
           }
       }
     }
@@ -126,5 +128,7 @@ object FullPull {
     spark.close()
     new JDBCUtil().updateJobState(jobID, "Run_RealTime");
   }
+
+
 
 }

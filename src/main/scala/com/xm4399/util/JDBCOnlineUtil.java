@@ -3,10 +3,7 @@ package com.xm4399.util;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunctionNewtonForm;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -17,7 +14,7 @@ import java.util.List;
 public class JDBCOnlineUtil {
 
     // 获取mysql全表的结构信息
-    public LinkedHashMap <String,String> getTableStru(String address, String username, String password, String dbName, String tableName){
+    public LinkedHashMap <String,String> getTablePriKeyStru(String address, String username, String password, String dbName, String tableName){
         Connection con = null;
         Statement stmt = null;
         ResultSet res = null;
@@ -81,6 +78,36 @@ public class JDBCOnlineUtil {
         return null;
     }
 
+    // 获取mysql表字段类型为mediumtext,longtext的字段名集合.kudu单元格最大存64k
+    public LinkedList <String> listLongTextFields(String address, String username, String password, String dbName, String tableName){
+        Connection con = null;
+        Statement stmt = null;
+        ResultSet res = null;
+        LinkedList<String> longTextFieldsList = new LinkedList<String>();
+        try {
+            con = getConnection(address, username, password, dbName);
+            stmt = con.createStatement();
+            // column_key表示是否为主键,是的话返回"PRI",否的话返回空字符串
+            String sql = "select column_name , DATA_TYPE from information_schema.columns " +
+                    "where table_schema = " + "\""  + dbName + "\""  +"  and table_name  = " + "\""  +tableName +  "\"" +";"  ;
+            res = stmt.executeQuery(sql);
+            while (res.next()) {
+                String dataType = res.getString(2);
+                if ("mediumtext".equals(dataType) || "longtext".equals(dataType)){
+                    longTextFieldsList.add(dataType);
+                }
+
+            }
+
+            return longTextFieldsList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(res,stmt,con);
+        }
+        return null;
+    }
+
 
     // 获取所有分表名
     public  ArrayList<String> listAllSubTableName(String address, String username, String password, String  dbName, String tableName){
@@ -96,7 +123,6 @@ public class JDBCOnlineUtil {
             res = stmt.executeQuery(sql);
             while (res.next()) {
                 String subTableName = res.getString(1);
-                System.out.println("将表  " + subTableName +"  加入集合>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
                 allSubTableList.add(subTableName);
             }
             return allSubTableList;

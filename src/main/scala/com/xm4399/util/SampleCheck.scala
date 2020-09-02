@@ -57,7 +57,7 @@ object SampleCheck {
     var  map: util.LinkedHashMap[String, String] = null
     // 分为全表拉取和安字段拉取两种
     if ("false".equals(fields)){
-      map = new JDBCOnlineUtil().getTableStru(address, username, password, dbName, oneSubTableName)
+      map = new JDBCOnlineUtil().getTablePriKeyStru(address, username, password, dbName, oneSubTableName)
     } else {
       map = new JDBCOnlineUtil().getTableStruFields(address, username, password, dbName, oneSubTableName, fields)
     }
@@ -123,7 +123,7 @@ object SampleCheck {
     val kuduTable = kuduClient.openTable(kuduTableName)
     var  map: util.LinkedHashMap[String, String] = null
     if ("false".equals(fields)){
-      map = new JDBCOnlineUtil().getTableStru(address, username, password, dbName, tableName)
+      map = new JDBCOnlineUtil().getTablePriKeyStru(address, username, password, dbName, tableName)
     } else {
       map = new JDBCOnlineUtil().getTableStruFields(address, username, password, dbName, tableName, fields)
     }
