@@ -20,8 +20,9 @@ object Test {
       .option("user", "canal")
       .option("password", "canal")
       .load()
-    val s = jdbcDF.withColumn("newColumn",substring(col("name"),1,100))
-      .drop("name").withColumnRenamed("newColumn","name")
+    jdbcDF.show()
+    val s = jdbcDF.withColumn("id",substring(col("id"),0,1))
+      //.drop("name").withColumnRenamed("newColumn","name")
     s.show()
   }
 }

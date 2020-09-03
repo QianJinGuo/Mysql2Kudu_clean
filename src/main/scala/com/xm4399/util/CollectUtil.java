@@ -32,10 +32,6 @@ public class CollectUtil {
         return priKeyList;
     }
 
-
-
-
-
     // 比较两个list是否相同
     public boolean isSameForTwoLists(ArrayList<String> list, ArrayList<String> list1) {
         if(list.size() != list1.size()) {
@@ -48,6 +44,5 @@ public class CollectUtil {
         }
         return true;
     }
-
 
 }
