@@ -19,7 +19,7 @@ public class OtherUtil {
             writer = new StringWriter();
             printWriter = new PrintWriter(writer);
             e.printStackTrace(printWriter);
-            return writer.toString();
+            return writer.toString().substring(0,60000);
         } finally {
             try {
                 if (writer != null)

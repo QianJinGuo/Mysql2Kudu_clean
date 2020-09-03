@@ -78,6 +78,33 @@ public class JDBCOnlineUtil {
         return null;
     }
 
+    // 获取mysql表所有字段名的list集合
+    public LinkedList <String> listAllFields(String address, String username, String password, String dbName, String tableName){
+        Connection con = null;
+        Statement stmt = null;
+        ResultSet res = null;
+        LinkedList<String> fieldsList = new LinkedList<String>();
+        try {
+            con = getConnection(address, username, password, dbName);
+            stmt = con.createStatement();
+            // column_key表示是否为主键,是的话返回"PRI",否的话返回空字符串
+            String sql = "select column_name  from information_schema.columns " +
+                    "where table_schema = " + "\""  + dbName + "\""  +"  and table_name  = " + "\""  +tableName +  "\"" +";"  ;
+            res = stmt.executeQuery(sql);
+            while (res.next()) {
+               String field = res.getString(1);
+               fieldsList.add(field);
+            }
+
+            return fieldsList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(res,stmt,con);
+        }
+        return null;
+    }
+
     // 获取mysql表字段类型为mediumtext,longtext的字段名集合.kudu单元格最大存64k
     public LinkedList <String> listLongTextFields(String address, String username, String password, String dbName, String tableName){
         Connection con = null;
@@ -94,7 +121,8 @@ public class JDBCOnlineUtil {
             while (res.next()) {
                 String dataType = res.getString(2);
                 if ("mediumtext".equals(dataType) || "longtext".equals(dataType)){
-                    longTextFieldsList.add(dataType);
+                    String field = res.getString(1);
+                    longTextFieldsList.add(field);
                 }
 
             }

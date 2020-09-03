@@ -41,7 +41,8 @@ object SampleCheck {
       }
     } catch {
       case e : Exception => {
-        val errorMsg = new OtherUtil().getException(e)
+        var errorMsg = new String()
+        errorMsg = new OtherUtil().getException(e)
         new JDBCUtil().insertErroeInfo(jobID, "CheckData", errorMsg )
         false
       }
