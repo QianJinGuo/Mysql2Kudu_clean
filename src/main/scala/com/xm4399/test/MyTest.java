@@ -6,13 +6,10 @@ public class MyTest {
 
 
     public static void main(String[] args) throws IOException {
-        try {
-            String[] arr = new String[1];
-            arr[0]= "aa";
-            arr[1] = "bb";
-        } catch(Exception e ){
-            System.out.println(">>>>>>>>>>>" + getException(e));;
-        }
+        String i = "ss";
+        int a = 12;
+        String sss= i +a;
+        System.out.println(sss);
 
     }
 

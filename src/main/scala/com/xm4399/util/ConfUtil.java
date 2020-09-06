@@ -20,4 +20,5 @@ public class ConfUtil {
         }
         return prop.getProperty(key);
     }
+
 }

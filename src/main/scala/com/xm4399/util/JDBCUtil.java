@@ -88,10 +88,9 @@ public class JDBCUtil {
 
 
     //写入报错信息
-    public  void insertErroeInfo(String jobID, String jobPart, String errorMsg)  {
+    public  void insertErrorInfo(String jobID, String jobPart, String errorMsg)  {
         Connection connection = null;
         PreparedStatement pst =null ;
-
         try {
             connection = getConnection();
             String sql = "insert into error_log (job_id, job_part, error_msg) values(?,?,?)";
@@ -142,7 +141,7 @@ public class JDBCUtil {
         String dbName = new ConfUtil().getValue("dbName");
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://" + address + "/chenzhikun_test", username, password);
+            connection = DriverManager.getConnection("jdbc:mysql://" + address + "/" + dbName, username, password);
             return connection;
         } catch (Exception e){
             e.printStackTrace();

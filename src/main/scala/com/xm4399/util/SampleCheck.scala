@@ -25,7 +25,7 @@ object SampleCheck {
     val kuduTableName = confInfoArr(8)
     // -------------------------------------------------------------------------
     val spark = SparkSession.builder().appName("CheckData").getOrCreate()
-    val kuduClient = new KuduClient.KuduClientBuilder("10.20.0.197:7051,10.20.0.198:7051,10.20.0.199:7051").build()
+    val kuduClient = new KuduClient.KuduClientBuilder(new ConfUtil().getValue("kuduMaster")).build()
     try{
       if ("true".equals(isSubTable)){
         val subTableList = new JDBCOnlineUtil().listAllSubTableName( address, username, password, dbName, tableName).asScala
@@ -41,9 +41,8 @@ object SampleCheck {
       }
     } catch {
       case e : Exception => {
-        var errorMsg = new String()
-        errorMsg = new OtherUtil().getException(e)
-        new JDBCUtil().insertErroeInfo(jobID, "CheckData", errorMsg )
+        new JDBCUtil().insertErrorInfo(jobID, "CheckData", "")
+        e.printStackTrace()
         false
       }
     } finally{
@@ -55,13 +54,7 @@ object SampleCheck {
   def checkSubTable(jobID : String, spark : SparkSession, kuduClient: KuduClient, address : String, username : String, password : String,
                     dbName : String, oneSubTableName : String,  kuduTableName : String, fields : String) : Boolean ={
     val kuduTable = kuduClient.openTable(kuduTableName)
-    var  map: util.LinkedHashMap[String, String] = null
-    // 分为全表拉取和安字段拉取两种
-    if ("false".equals(fields)){
-      map = new JDBCOnlineUtil().getTablePriKeyStru(address, username, password, dbName, oneSubTableName)
-    } else {
-      map = new JDBCOnlineUtil().getTableStruFields(address, username, password, dbName, oneSubTableName, fields)
-    }
+    val  map: util.LinkedHashMap[String, String] = new JDBCOnlineUtil().getTablePriKeyStru(address, username, password, dbName, oneSubTableName, fields)
     val allMysqlFieldsList = new CollectUtil().listAllMysqlFields(map).asScala
     var mysqlPriKeyList = new CollectUtil().listMysqlPriKey(map)
     mysqlPriKeyList.add("table_id")
@@ -69,7 +62,7 @@ object SampleCheck {
     val collectUtil = new CollectUtil()
     if (! collectUtil.isSameForTwoLists(mysqlPriKeyList, kuduPriKeyList)){
       println("mysql表和kudu表主键不对应")
-      new JDBCUtil().insertErroeInfo(jobID, "CheckData", "mysql表和kudu表主键不对应")
+      new JDBCUtil().insertErrorInfo(jobID, "CheckData", "mysql表和kudu表主键不对应")
       return false
     }
     val jdbcDS = spark.read
@@ -103,7 +96,8 @@ object SampleCheck {
       if (!isSame){
         for ((key,value) <- priKeyMap){
           val errorMsg = "主键为 " + key + " 字段,值为 " +  value + " 的row不对应"
-          new JDBCUtil().insertErroeInfo(jobID, "CheckData", errorMsg)
+          println(errorMsg)
+          new JDBCUtil().insertErrorInfo(jobID, "CheckData", errorMsg)
         }
         return false
       }
@@ -122,19 +116,14 @@ object SampleCheck {
   def checkTable(jobID : String, spark : SparkSession, kuduClient: KuduClient,address : String, username : String,
                  password : String, dbName : String, tableName : String, kuduTableName : String, fields : String) : Boolean ={
     val kuduTable = kuduClient.openTable(kuduTableName)
-    var  map: util.LinkedHashMap[String, String] = null
-    if ("false".equals(fields)){
-      map = new JDBCOnlineUtil().getTablePriKeyStru(address, username, password, dbName, tableName)
-    } else {
-      map = new JDBCOnlineUtil().getTableStruFields(address, username, password, dbName, tableName, fields)
-    }
+    val  map: util.LinkedHashMap[String, String] = new JDBCOnlineUtil().getTablePriKeyStru(address, username, password, dbName, tableName, fields)
     val allMysqlFieldsList = new CollectUtil().listAllMysqlFields(map).asScala
     val mysqlPriKeyList = new CollectUtil().listMysqlPriKey(map)
     val kuduPriKeyList = new KuduUtil().listKuduPriKey(kuduTable)
     val collectUtil = new CollectUtil()
     if (! collectUtil.isSameForTwoLists(mysqlPriKeyList, kuduPriKeyList)){
       println("mysql表和kudu表主键不对应")
-      new JDBCUtil().insertErroeInfo(jobID, "CheckData", "mysql表和kudu表主键不对应")
+      new JDBCUtil().insertErrorInfo(jobID, "CheckData", "mysql表和kudu表主键不对应")
       return false
     }
     val jdbcDS = spark.read
@@ -163,7 +152,7 @@ object SampleCheck {
       if (!isSame){
         for ((key,value) <- priKeyMap){
           val errorMsg = "主键为 " + key + " 字段,值为 " +  value + " 的row不对应"
-          new JDBCUtil().insertErroeInfo(jobID, "CheckData", errorMsg)
+          new JDBCUtil().insertErrorInfo(jobID, "CheckData", errorMsg)
         }
         return false
       }

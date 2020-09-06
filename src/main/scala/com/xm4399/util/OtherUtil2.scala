@@ -6,6 +6,7 @@ package com.xm4399.util
  * @Description:
  */
 object OtherUtil2 {
+  // 判断两个map是否相同
   def isSameFromTwoMap (map1: Map[String,Any], map2: Map[String,Any]) : Boolean={
     if (map1.size != map2.size){
       return false

@@ -1,6 +1,6 @@
 package com.xm4399.run
 
-import com.xm4399.util.{BigTableFullPull, CreateKuduTable, JDBCOnlineUtil, JDBCUtil, OtherUtil}
+import com.xm4399.util.{BigTableFullPull, ConfUtil, CreateKuduTable, JDBCOnlineUtil, JDBCUtil, OtherUtil}
 import org.apache.spark.sql.functions.{col, lit, substring}
 import org.apache.spark.sql.{SaveMode, SparkSession}
 
@@ -28,11 +28,12 @@ object FullPull {
    // --------------------------------------------------------------------
     try {
       // 记录全量拉取running状态
-      new JDBCUtil().updateJobState(jobID, "Running_FullPull");
+      new JDBCUtil().updateJobState(jobID, "2_FullPull");
+      // 是否大表,是否分表
       if ("false".equals(isBigTable)){
         if ("true".equals(isSubTable)) {
           val fieldNameArr = CreateKuduTable.listKuduFieldName(kuduTableName).asScala.toList
-          val spark = SparkSession.builder().appName("MysqlFullPullKudu").getOrCreate()
+          val spark = SparkSession.builder().appName("MysqlFullPull2Kudu_" +jobID).getOrCreate()
           val subTableNameList = new JDBCOnlineUtil().listAllSubTableName(address, username, password, dbName, tableName).asScala
           for(oneSubTableName <- subTableNameList){
             pullSubTable(spark, address, username, password, dbName, tableName, oneSubTableName, fieldNameArr, kuduTableName, fields)
@@ -43,24 +44,22 @@ object FullPull {
         }
       }else if ("true".equals(isBigTable)){
         if ("true".equals(isSubTable)) {
-          //val fieldNameArr = CreateKuduTable.listKuduFieldName(kuduTableName).asScala.toList
-          val spark = SparkSession.builder().appName("MysqlFullPullKudu").getOrCreate()
+          val spark = SparkSession.builder().appName("MysqlFullPull2Kudu_" + jobID).getOrCreate()
           val subTableNameList = new JDBCOnlineUtil().listAllSubTableName(address, username, password, dbName, tableName).asScala
           for(oneSubTableName <- subTableNameList){
             BigTableFullPull.pullBigTableSubTable(spark, address, username, password, dbName, oneSubTableName, fields, kuduTableName)
           }
           spark.close()
         }else {
-          BigTableFullPull.pullBigTable(address, username, password, dbName,tableName, fields, kuduTableName)
+          BigTableFullPull.pullBigTable(jobID,address, username, password, dbName,tableName, fields, kuduTableName)
         }
       }
       // 记录全量拉取完成的状态
-      new JDBCUtil().updateJobState(jobID, "Run_RealTime");
+      new JDBCUtil().updateJobState(jobID, "1_FullPull");
     }catch {
         case e : Exception => {
-        new JDBCUtil().updateJobState(jobID, "Failed_FullPull");
-        val errorMsg = new OtherUtil().getException(e)
-        new JDBCUtil().insertErroeInfo(jobID, "FullPull", errorMsg )
+        new JDBCUtil().updateJobState(jobID, "-1_FullPull");
+        new JDBCUtil().insertErrorInfo(jobID, "FullPull", "" )
         e.printStackTrace()
       }
     }
@@ -97,15 +96,14 @@ object FullPull {
     if (longTextFiledsList.size() >0){
       val list = longTextFiledsList.asScala
       for (columnName <- list){
-        // 增加新列存蓄截断后的字符值,删除原来字段,重命名新字段为原来字段名
-        jdbcDF = jdbcDF.withColumn("newColumn",substring(col(columnName),0,16380))
-          .drop(columnName).withColumnRenamed("newColumn",columnName)
+        // 对于text类型的字段,进行截取字符串
+        jdbcDF = jdbcDF.withColumn(columnName,substring(col(columnName),0,16380))
       }
       /* val filedsList = new JDBCOnlineUtil().listAllFields(address, username, password, dbName, tableName).asScala
        jdbcDF.selectExpr(filedsList:_*)*/
     }
 
-    val KUDU_MASTERS = "10.20.0.197:7051,10.20.0.198:7051,10.20.0.199:7051"
+    val KUDU_MASTERS = new ConfUtil().getValue("kuduMaster")
     jdbcDF
       .write
       .mode(SaveMode.Append) // 只支持Append模式 键相同的会自动覆盖
@@ -117,7 +115,7 @@ object FullPull {
 
   def pullTable(address: String, username: String, password: String, dbName: String,
                 tableName: String, kuduTableName: String, fields :String, jobID : String): Unit = {
-    val spark = SparkSession.builder().appName("MysqlFullPullKudu").getOrCreate()
+    val spark = SparkSession.builder().appName("MysqlFullPull2Kudu_" + jobID).getOrCreate()
     var jdbcDF = spark.read
       .format("jdbc")
       .option("driver","com.mysql.jdbc.Driver")
@@ -138,15 +136,12 @@ object FullPull {
     if (longTextFiledsList.size() >0){
       val list = longTextFiledsList.asScala
       for (columnName <- list){
-        // 增加新列存蓄截断后的字符值,删除原来字段,重命名新字段为原来字段名
-        jdbcDF = jdbcDF.withColumn("newColumn",substring(col(columnName),0,16380))
-          .drop(columnName).withColumnRenamed("newColumn",columnName)
+        // 对于text类型的字段,进行截取字符串
+        jdbcDF = jdbcDF.withColumn(columnName,substring(col(columnName),0,16380))
       }
-      /* val filedsList = new JDBCOnlineUtil().listAllFields(address, username, password, dbName, tableName).asScala
-       jdbcDF.selectExpr(filedsList:_*)*/
     }
 
-    val KUDU_MASTERS = "10.20.0.197:7051,10.20.0.198:7051,10.20.0.199:7051"
+    val KUDU_MASTERS = new ConfUtil().getValue("kuduMaster")
     jdbcDF
       .write
       .mode(SaveMode.Append) // 只支持Append模式 键相同的会自动覆盖

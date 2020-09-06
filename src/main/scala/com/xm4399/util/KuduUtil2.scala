@@ -41,7 +41,7 @@ object KuduUtil2 {
 
   // 获取kudu的记录数
   def getkuduRowsCount(kuduTableName : String, timestampFieldName : String, timestampNum : String) :Long ={
-    val kuduClient = new KuduClient.KuduClientBuilder("10.20.0.197:7051,10.20.0.198:7051,10.20.0.199:7051").build()
+    val kuduClient = new KuduClient.KuduClientBuilder(new ConfUtil().getValue("kuduMaster")	).build()
     val kuduTable = kuduClient.openTable(kuduTableName)
     // 设置查询条件
     val timestampLong: Long = timestampNum.toLong

@@ -16,7 +16,7 @@ public class CreateKuduTable {
 
 
     public static List<String> listKuduFieldName(String kuduTableName) throws KuduException {
-        KuduClient kuduClient = new KuduClient.KuduClientBuilder("10.20.0.197:7051,10.20.0.198:7051,10.20.0.199:7051")
+        KuduClient kuduClient = new KuduClient.KuduClientBuilder(new ConfUtil().getValue("kuduMaster")	)
                 .defaultAdminOperationTimeoutMs(60000).defaultOperationTimeoutMs(60000).build();
         KuduTable kuduTable = kuduClient.openTable(kuduTableName);
         Schema colSchema =kuduTable.getSchema();
@@ -33,7 +33,7 @@ public class CreateKuduTable {
 
 /*    //根据传入的字段结构建kudu表,并返回字段名的数组
     public  static String[] createKuduTable(LinkedHashMap<String,String[]> fieldInfoMap, String tableName, String isSubTable){
-        KuduClient client = new KuduClient.KuduClientBuilder("10.20.0.197:7051,10.20.0.198:7051,10.20.0.199:7051")
+        KuduClient client = new KuduClient.KuduClientBuilder(new ConfUtil().getValue("kuduMaster")	)
                                 .defaultAdminOperationTimeoutMs(60000).build();
         KuduSession session = client.newSession();
         // 此处所定义的是rpc连接超时

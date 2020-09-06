@@ -46,7 +46,7 @@ object RunDataCheck {
     } else {
       println("isSubTable参数有误")
       val errorMsg = "isSubTable参数有误";
-      new JDBCUtil().insertErroeInfo(jobID, "CheckData", errorMsg);
+      new JDBCUtil().insertErrorInfo(jobID, "CheckData", errorMsg);
     }
     // kudu表记录数
     val kuduCount = KuduUtil2.getkuduRowsCount(kuduTableName, timestampFieldName, timestampStr)
@@ -54,7 +54,7 @@ object RunDataCheck {
       true
     } else {
       val errorMsg = "mysql记录数为 " + mysqlCount + ",  kudu记录数为 "  + kuduCount;
-      new JDBCUtil().insertErroeInfo(jobID, "CheckData", errorMsg);
+      new JDBCUtil().insertErrorInfo(jobID, "CheckData", errorMsg);
       false
     }
   }

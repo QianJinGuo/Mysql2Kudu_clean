@@ -20,25 +20,26 @@ object BigTableFullPull {
     val tableName = args(4)
     val fields = args(5)
     val kuduTableName = args(6)
-    pullBigTable(address, username, password, dbName, tableName, fields, kuduTableName)
+    //pullBigTable(jobID, address, username, password, dbName, tableName, fields, kuduTableName)
   }
 
-  def pullBigTable(address : String, username : String, password : String, dbName : String,
+  def pullBigTable(jobID : String, address : String, username : String, password : String, dbName : String,
                    tableName : String, fields : String, kuduTableName : String): Unit = {
-    val spark = SparkSession.builder().appName("MysqlFullPullKudu").getOrCreate()
+    val spark = SparkSession.builder().appName("MysqlFullPull2Kudu_" + jobID).getOrCreate()
     // 获取mysql主键
-    val map = new JDBCOnlineUtil().getTablePriKeyStru(address,username,password,dbName,tableName)
+    val map = new JDBCOnlineUtil().getTablePriKeyStru(address,username,password,dbName,tableName, fields)
     val mysqlPriKeyList = new CollectUtil().listMysqlPriKey(map)
     var pkStr : String = null
     if (mysqlPriKeyList.size() > 0){
       pkStr = mysqlPriKeyList.get(0)
     }
     // 分区设置
-    val partitons = new Array[String](3);
-    //三个分区,第一个为1-500w,第二为500w-1000w,第三为1000为2000w.多出的50为缓解拉取过程中的增量数据
+    val partitons = new Array[String](4);
+    //三个分区,第一个为1-500w,第二为500w-1000w,第三为1000-1500w.多出的50为缓解拉取过程中的增量数据
     partitons(0) = s"1=1 and $pkStr >=(select $pkStr from $tableName order by $pkStr limit 1) limit  5000000"
     partitons(1) = s"1=1 and $pkStr >=(select $pkStr from $tableName order by $pkStr limit 4999950,1) limit  5000100"
-    partitons(2) = s"1=1 and $pkStr >=(select $pkStr from $tableName order by $pkStr limit 9999950,1) limit  0,10000000"
+    partitons(2) = s"1=1 and $pkStr >=(select $pkStr from $tableName order by $pkStr limit 9999950,1) limit  0,5000200"
+    partitons(3) = s"1=1 and $pkStr >=(select $pkStr from $tableName order by $pkStr limit 14999900,1) limit  0,5000200"
 
     val prop = new Properties()
     prop.setProperty("driver", "com.mysql.jdbc.Driver")
@@ -51,9 +52,8 @@ object BigTableFullPull {
     if (longTextFiledsList.size() >0){
       val list = longTextFiledsList.asScala
       for (columnName <- list){
-        // 增加新列存蓄截断后的字符值,删除原来字段,重命名新字段为原来字段名
-        jdbcDF = jdbcDF.withColumn("newColumn",substring(col(columnName),0,16380))
-          .drop(columnName).withColumnRenamed("newColumn",columnName)
+        // 对于text类型的字段,进行截取字符串
+        jdbcDF = jdbcDF.withColumn(columnName,substring(col(columnName),0,16380))
       }
      /* val filedsList = new JDBCOnlineUtil().listAllFields(address, username, password, dbName, tableName).asScala
       jdbcDF.selectExpr(filedsList:_*)*/
@@ -65,7 +65,7 @@ object BigTableFullPull {
       jdbcDF = jdbcDF.selectExpr(fieldsArr:_*)
     }
 
-    val KUDU_MASTERS = "10.20.0.197:7051,10.20.0.198:7051,10.20.0.199:7051"
+    val KUDU_MASTERS = new ConfUtil().getValue("kuduMaster")
     jdbcDF
       .write
       .mode(SaveMode.Append) // 只支持Append模式 键相同的会自动覆盖
@@ -79,18 +79,19 @@ object BigTableFullPull {
   def pullBigTableSubTable(spark : SparkSession,address : String, username : String, password : String, dbName : String,
                            oneSubTableName : String, fields : String, kuduTableName : String): Unit = {
     // 获取mysql主键
-    val map = new JDBCOnlineUtil().getTablePriKeyStru(address,username,password,dbName,oneSubTableName)
+    val map = new JDBCOnlineUtil().getTablePriKeyStru(address,username,password,dbName,oneSubTableName, fields)
     val mysqlPriKeyList = new CollectUtil().listMysqlPriKey(map)
     var pkStr : String = null
     if (mysqlPriKeyList.size() > 0){
       pkStr = mysqlPriKeyList.get(0)
     }
     // 分区设置
-    val partitons = new Array[String](3);
+    val partitons = new Array[String](4);
     //三个分区,第一个为1-500w,第二为500w-1000w,第三为1000为2000w.多出的50为缓解拉取过程中的增量数据
     partitons(0) = s"1=1 and $pkStr >=(select $pkStr from $oneSubTableName order by $pkStr limit 1) limit  5000000"
     partitons(1) = s"1=1 and $pkStr >=(select $pkStr from $oneSubTableName order by $pkStr limit 4999950,1) limit  5000100"
-    partitons(2) = s"1=1 and $pkStr >=(select $pkStr from $oneSubTableName order by $pkStr limit 9999950,1) limit  0,10000000"
+    partitons(2) = s"1=1 and $pkStr >=(select $pkStr from $oneSubTableName order by $pkStr limit 9999950,1) limit  0,5000200"
+    partitons(3) = s"1=1 and $pkStr >=(select $pkStr from $oneSubTableName order by $pkStr limit 14999900,1) limit  0,5000200"
 
     val prop = new Properties()
     prop.setProperty("driver", "com.mysql.jdbc.Driver")
@@ -108,9 +109,8 @@ object BigTableFullPull {
     if (longTextFiledsList.size() >0){
       val list = longTextFiledsList.asScala
       for (columnName <- list){
-        // 增加新列存蓄截断后的字符值,删除原来字段,重命名新字段为原来字段名
-        jdbcDF = jdbcDF.withColumn("newColumn",substring(col(columnName),0,16380))
-          .drop(columnName).withColumnRenamed("newColumn",columnName)
+        // 对于text类型的字段,进行截取字符串
+        jdbcDF = jdbcDF.withColumn(columnName,substring(col(columnName),0,16380))
       }
       /* val filedsList = new JDBCOnlineUtil().listAllFields(address, username, password, dbName, tableName).asScala
        jdbcDF.selectExpr(filedsList:_*)*/
@@ -125,7 +125,7 @@ object BigTableFullPull {
 
     }
 
-    val KUDU_MASTERS = "10.20.0.197:7051,10.20.0.198:7051,10.20.0.199:7051"
+    val KUDU_MASTERS = new ConfUtil().getValue("kuduMaster")
     jdbcDF
       .write
       .mode(SaveMode.Append) // 只支持Append模式 键相同的会自动覆盖

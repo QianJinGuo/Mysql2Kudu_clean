@@ -14,7 +14,7 @@ import java.util.*;
 public class JDBCOnlineUtil {
 
     // 获取mysql全表的结构信息
-    public LinkedHashMap <String,String> getTablePriKeyStru(String address, String username, String password, String dbName, String tableName){
+    public LinkedHashMap <String,String> getTablePriKeyStru(String address, String username, String password, String dbName, String tableName, String fields){
         Connection con = null;
         Statement stmt = null;
         ResultSet res = null;
@@ -31,6 +31,18 @@ public class JDBCOnlineUtil {
                 String isPriKey = res.getString(2);
                 fieldAndIsPKMap.put(name,isPriKey);
             }
+            //如果按字段拉取的情况,map删除不必要的字段
+            if (!"false".equals(fields)){
+                List<String> fieldsList = Arrays.asList(fields.split(","));
+                Iterator<Map.Entry<String, String>> it = fieldAndIsPKMap.entrySet().iterator();
+                while (it.hasNext()){
+                    Map.Entry<String,String> entry = it.next();
+                    String field = entry.getKey();
+                    if (!fieldsList.contains(field)){
+                        it.remove();
+                    }
+                }
+            }
             if (fieldAndIsPKMap.size() ==0 ){
                 System.out.println("获取表 " + tableName + " 结构的Map为空" );
             }
@@ -43,7 +55,7 @@ public class JDBCOnlineUtil {
         return null;
     }
 
-    // 按字段拉取的情况下,获取mysql相应字段信息
+  /*  // 按字段拉取的情况下,获取mysql相应字段信息
     public  LinkedHashMap<String, String> getTableStruFields(String address, String username, String password, String dbName, String tableName, String fields){
         Connection con = null; ;
         Statement stmt = null;
@@ -76,7 +88,7 @@ public class JDBCOnlineUtil {
             close(res, stmt, con);
         }
         return null;
-    }
+    }*/
 
     // 获取mysql表所有字段名的list集合
     public LinkedList <String> listAllFields(String address, String username, String password, String dbName, String tableName){
