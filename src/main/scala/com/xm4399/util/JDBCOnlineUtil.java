@@ -1,7 +1,5 @@
 package com.xm4399.util;
 
-import org.apache.commons.math3.analysis.polynomials.PolynomialFunctionNewtonForm;
-
 import java.sql.*;
 import java.util.*;
 
@@ -204,7 +202,7 @@ public class JDBCOnlineUtil {
     public  Connection getConnection (String address, String username, String password,String dbName){
         Connection connection = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://" + address + "/" + dbName, username, password);
             //connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/chenzhikun", "canal", "canal");
             return connection;

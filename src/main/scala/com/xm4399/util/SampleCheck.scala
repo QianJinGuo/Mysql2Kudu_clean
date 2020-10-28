@@ -5,6 +5,8 @@ import java.util
 import com.xm4399
 import org.apache.kudu.client.KuduClient
 import org.apache.spark.sql.{Row, SparkSession}
+import org.slf4j.{Logger, LoggerFactory}
+
 import scala.collection.JavaConverters._
 /**
  * @Auther: czk
@@ -22,7 +24,7 @@ object SampleCheck {
     val tableName = confInfoArr(4);
     val fields = confInfoArr(5)
     val isSubTable = confInfoArr(6);
-    val kuduTableName = confInfoArr(8)
+    val kuduTableName = confInfoArr(7)
     // -------------------------------------------------------------------------
     val spark = SparkSession.builder().appName("CheckData").getOrCreate()
     val kuduClient = new KuduClient.KuduClientBuilder(new ConfUtil().getValue("kuduMaster")).build()
@@ -61,7 +63,6 @@ object SampleCheck {
     val kuduPriKeyList = new KuduUtil().listKuduPriKey(kuduTable)
     val collectUtil = new CollectUtil()
     if (! collectUtil.isSameForTwoLists(mysqlPriKeyList, kuduPriKeyList)){
-      println("mysql表和kudu表主键不对应")
       new JDBCUtil().insertErrorInfo(jobID, "CheckData", "mysql表和kudu表主键不对应")
       return false
     }
@@ -73,7 +74,7 @@ object SampleCheck {
       .option("user", username)
       .option("password", password)
       .load()
-      .sample(false,0.01)
+      .sample(false,0.001)
 
     // 分标的情况下,kudu表比mysql表多了个table_id列
     val table_id_str = oneSubTableName.substring(oneSubTableName.lastIndexOf("_") + 1, oneSubTableName.length)
@@ -92,7 +93,7 @@ object SampleCheck {
 
       // 获取kudu one row 所有字段和value的map集合
       val kuduOneRowFieldsAndValue = xm4399.util.KuduUtil2.getkuduRowMap(kuduClient, kuduTable, priKeyMap)
-      val isSame = OtherUtil2.isSameFromTwoMap(mysqlOneRowFieldsAndValue, kuduOneRowFieldsAndValue)
+      val isSame = OtherUtil.isSameFromTwoMap(mysqlOneRowFieldsAndValue, kuduOneRowFieldsAndValue)
       if (!isSame){
         for ((key,value) <- priKeyMap){
           val errorMsg = "主键为 " + key + " 字段,值为 " +  value + " 的row不对应"
@@ -122,7 +123,6 @@ object SampleCheck {
     val kuduPriKeyList = new KuduUtil().listKuduPriKey(kuduTable)
     val collectUtil = new CollectUtil()
     if (! collectUtil.isSameForTwoLists(mysqlPriKeyList, kuduPriKeyList)){
-      println("mysql表和kudu表主键不对应")
       new JDBCUtil().insertErrorInfo(jobID, "CheckData", "mysql表和kudu表主键不对应")
       return false
     }
@@ -134,7 +134,7 @@ object SampleCheck {
       .option("user", username)
       .option("password", password)
       .load()
-      .sample(false,0.01)
+      .sample(false,0.001)
     //对比mysql row和kudu row
     def circularProcess(item : Row ) : Boolean = {
       // 获取mysql一行所有字段和value的map集合
@@ -148,7 +148,7 @@ object SampleCheck {
       }
       // 获取kudu one row 所有字段和value的map集合
       val kuduOneRowFieldsAndValue = xm4399.util.KuduUtil2.getkuduRowMap(kuduClient, kuduTable, priKeyMap)
-      val isSame = OtherUtil2.isSameFromTwoMap(mysqlOneRowFieldsAndValue, kuduOneRowFieldsAndValue)
+      val isSame = OtherUtil.isSameFromTwoMap(mysqlOneRowFieldsAndValue, kuduOneRowFieldsAndValue)
       if (!isSame){
         for ((key,value) <- priKeyMap){
           val errorMsg = "主键为 " + key + " 字段,值为 " +  value + " 的row不对应"

@@ -27,11 +27,9 @@ public class JDBCUtil {
                 String tableName = res.getString(7);
                 String fields = res.getString(8);
                 String isSubtable = res.getString(9);
-                String topic = res.getString(10);
-                String kuduTableName = res.getString(11);
-                String mode = res.getString(12);
-                String timestampFieldName = res.getString(13);
-                String isBigTable = res.getString(14);
+                String kuduTableName = res.getString(10);
+                String timestampFieldName = res.getString(12);
+
 
                 confInfoArr[0] = address;
                 confInfoArr[1] = username;
@@ -40,11 +38,9 @@ public class JDBCUtil {
                 confInfoArr[4] = tableName;
                 confInfoArr[5] = fields;
                 confInfoArr[6] = isSubtable;
-                confInfoArr[7] = topic;
-                confInfoArr[8] = kuduTableName;
-                confInfoArr[9] = mode;
-                confInfoArr[10] = timestampFieldName;
-                confInfoArr[11] = isBigTable;
+                confInfoArr[7] = kuduTableName;
+                confInfoArr[8] = timestampFieldName;
+
             }
             return confInfoArr;
         } catch (Exception e) {
@@ -140,7 +136,7 @@ public class JDBCUtil {
         String password = new ConfUtil().getValue("password");
         String dbName = new ConfUtil().getValue("dbName");
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://" + address + "/" + dbName, username, password);
             return connection;
         } catch (Exception e){

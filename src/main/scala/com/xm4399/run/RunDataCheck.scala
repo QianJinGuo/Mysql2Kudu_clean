@@ -14,15 +14,15 @@ object RunDataCheck {
     val jobID= args(0)
     val timestampStr = args(1)
     val confInfoArr = new JDBCUtil().getConfInfoArr(jobID)
-    val address = confInfoArr(0);
-    val username = confInfoArr(1);
-    val password = confInfoArr(2);
-    val dbName = confInfoArr(3);
-    val tableName = confInfoArr(4);
+    val address = confInfoArr(0)
+    val username = confInfoArr(1)
+    val password = confInfoArr(2)
+    val dbName = confInfoArr(3)
+    val tableName = confInfoArr(4)
     val fields = confInfoArr(5)
-    val isSubTable = confInfoArr(6);
-    val kuduTableName = confInfoArr(8)
-    val timestampFieldName = confInfoArr(10)
+    val isSubTable = confInfoArr(6)
+    val kuduTableName = confInfoArr(7)
+    val timestampFieldName = confInfoArr(8)
     //------------------------------------------------------
     val countResult = checkCount(jobID, address, username, password, dbName, tableName, isSubTable, kuduTableName, timestampFieldName, timestampStr)
     val sampleResult = SampleCheck.checkBetweenMysqlAndKudu(jobID)
